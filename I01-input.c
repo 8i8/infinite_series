@@ -32,3 +32,14 @@ void get_parameters(int *start, int *quantity, int *divisions)
     fflush(stdin);
     scanf(" %d", &(*divisions));
 }
+
+/*
+ * Request divisions.
+ */
+
+void get_divisions(int* divisions)
+{
+    printf("Quantity of divisions: ");
+    fflush(stdin);
+    scanf(" %d", &(*divisions));
+}

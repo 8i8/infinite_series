@@ -37,6 +37,36 @@ calc* new_data_struct_2(int quant, int divisions)
 }
 
 /*
+ * Generate inital harmonics array.
+ */
+
+harmonic* gen_data_1(int* start, int* quantity)
+{
+    harmonic* data_1;
+
+    /* Generate the initial harmonics array. */
+    data_1 = new_data_struct_1(*quantity);
+    data_1 = gen_harmonics(data_1, *start, *quantity);
+
+    return data_1;
+}
+
+/*
+ * Generate array of divisions between harmonics.
+ */
+
+calc* gen_data_2(harmonic* data_1, int* quantity, int* divisions)
+{
+    calc* data_2;
+
+    /* Generate the subdivisions of each harmonic. */
+    data_2 = new_data_struct_2(*quantity, *divisions);
+    data_2 = gen_subs(data_1, data_2, *quantity, *divisions);
+
+    return data_2;
+}
+
+/*
  * free memory.
  */
 

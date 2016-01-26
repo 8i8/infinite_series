@@ -62,6 +62,8 @@ calc* gen_subs(harmonic *harmonics, calc *divisions, int quantity, int divs);
 
 harmonic* new_data_struct_1(int quant);
 calc* new_data_struct_2(int quant, int divisions);
+harmonic* gen_data_1(int* start, int* quantity);
+calc* gen_data_2(harmonic* data_1, int* quantity, int* divisions);
 void free_memory(void *data);
 
 /* input */
@@ -69,6 +71,7 @@ void free_memory(void *data);
 void off_set_param(int* start, int* quantity);
 void get_choice(int* choice);
 void get_parameters(int *start, int *quantity, int *divisions);
+void get_divisions();
 
 /* main */
 

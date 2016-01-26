@@ -16,9 +16,10 @@ int main (int argc, char *argv[])
     harmonic*   data_1;
     calc*       data_2;
 
-    int         start, quantity, divisions;
-
-    int         choice;
+    int         start       = 0,
+                quantity    = 0,
+                divisions   = 0,
+                choice;
 
     /*
      * Program header request increments and other data.
@@ -33,7 +34,7 @@ int main (int argc, char *argv[])
         printf("Please choose an option:\n");
         printf("    1). Set paramiters start and length of calc.\n");
         printf("    2). Set number of divisions.\n");
-        printf("    3). Run calc.\n");
+        printf("    3). Print to screen.\n");
         printf("    4). Exit.\n");
         graphic_bar();
 
@@ -45,35 +46,32 @@ int main (int argc, char *argv[])
                 /* Get parameters */
                 get_parameters(&start, &quantity, &divisions);
                 off_set_param(&start, &quantity);
-
-                    /* Generate the initial harmonics array. */
-                    data_1 = new_data_struct_1(quantity);
-                    data_1 = gen_harmonics(data_1, start, quantity);
-
-                    /* Generate the subdivisions of each harmonic. */
-                    data_2 = new_data_struct_2(quantity, divisions);
-                    data_2 = gen_subs(data_1, data_2, quantity, divisions);
-                    free_memory(data_1);
-
-                    /* Output to screen */
-                    print_data(data_2, quantity, divisions);
-                    free_memory(data_2);
+                /* Generate the initial harmonics array. */
+                data_1 = gen_data_1(&start, &quantity);
+                /* Generate the subdivisions of each harmonic. */
+                data_2 = gen_data_2(data_1, &quantity, & divisions);
+                print_data(data_2, quantity, divisions);
                 break;
             case 2:
+                /* Request divisions */
+                get_divisions(&divisions);
+
+                if (start > 0 && quantity > 0)
+                {
+                    data_2 = gen_data_2(data_1, &quantity, & divisions);
+                    print_data(data_2, quantity, divisions);
+                }
                 break;
             case 3:
-                /* Generate the initial harmonics array. */
-                data_1 = new_data_struct_1(quantity);
-                data_1 = gen_harmonics(data_1, start, quantity);
-
-                /* Generate the subdivisions of each harmonic. */
-                data_2 = new_data_struct_2(quantity, divisions);
-                data_2 = gen_subs(data_1, data_2, quantity, divisions);
-                free_memory(data_1);
-
-                /* Output to screen */
-                print_data(data_2, quantity, divisions);
-                free_memory(data_2);
+                if (start > 0 && quantity > 0 && divisions > 0)
+                {
+                    /* Generate the initial harmonics array. */
+                    data_1 = gen_data_1(&start, &quantity);
+                    /* Generate the subdivisions of each harmonic. */
+                    data_2 = gen_data_2(data_1, &quantity, & divisions);
+                    /* Print to screen. */
+                    print_data(data_2, quantity, divisions);
+                }
                 break;
             case 4:
                 break;
@@ -85,6 +83,9 @@ int main (int argc, char *argv[])
             break;
 
     }
+
+    free_memory(data_1);
+    free_memory(data_2);
 
     return 0;
 
