@@ -1,0 +1,78 @@
+/*
+ * Program to explore the patterns inherent within an infinite series, also
+ * those between it and the bounds that are the environment within which it is
+ * propagated.
+ */
+
+/*****************************************************************************
+ * Program structures.
+ *****************************************************************************/
+
+/*
+ * A structure to formulate an array of harmonics.
+ *
+ * id = basic line number
+ * value = the decimal value of the corresponding harmonic.
+ */
+
+struct harmonics
+{
+    int         id;
+    double      value;
+};
+
+typedef struct harmonics    harmonic;
+
+/*
+ * A structure to store the values of the divisors calculated between each
+ * harmonic.
+ * id = the line number.
+ * harmonic = the line number from the previous array, the number of the
+ * harmonic.
+ * division = the number of subdivisions.
+ * fraction = which sub-division is the current sub-devision.
+ */
+
+struct calculation
+{
+    int         id;      
+    int         harmonic;
+    int         division;
+    int         fraction;
+    double      value;
+
+};
+
+typedef struct calculation  calc;
+
+/*****************************************************************************
+ * Function defanitions.
+ *****************************************************************************/
+
+/* calc */
+
+harmonic* gen_harmonics(harmonic* harm_series, int start, int quantity);
+calc* gen_subs(harmonic *harmonics, calc *divisions, int quantity, int divs);
+
+/* data */
+
+harmonic* new_data_struct_1(int quant);
+calc* new_data_struct_2(int quant, int divisions);
+
+/* input */
+
+void off_set_param(int* start, int* quantity);
+void get_choice(int* choice);
+void get_parameters(int *start, int *quantity, int *divisions);
+
+/* main */
+
+/* output */
+
+void print_harmonics(harmonic* harm_series, int quantity);
+void print_data(calc* divisions, int quantity, int divs);
+
+/* util */
+
+void graphic_bar();
+void pause();
