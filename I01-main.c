@@ -5,7 +5,6 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include "I01-inf_series.h"
 
 /*
@@ -16,13 +15,13 @@ int main (int argc, char *argv[])
 {
     harmonic*   data_1;
     calc*       data_2;
+
+    int         start, quantity, divisions;
+
     int         choice;
-    int         start;
-    int         quantity;
-    int         divisions;
 
     /*
-     * Program header request increment.
+     * Program header request increments and other data.
      */
 
     for (;;)
@@ -43,33 +42,38 @@ int main (int argc, char *argv[])
         switch (choice)
         {
             case 1:
-
-                /*
-                 * Get parameters.
-                 */
-
+                /* Get parameters */
                 get_parameters(&start, &quantity, &divisions);
                 off_set_param(&start, &quantity);
+
+                    /* Generate the initial harmonics array. */
+                    data_1 = new_data_struct_1(quantity);
+                    data_1 = gen_harmonics(data_1, start, quantity);
+
+                    /* Generate the subdivisions of each harmonic. */
+                    data_2 = new_data_struct_2(quantity, divisions);
+                    data_2 = gen_subs(data_1, data_2, quantity, divisions);
+                    free_memory(data_1);
+
+                    /* Output to screen */
+                    print_data(data_2, quantity, divisions);
+                    free_memory(data_2);
                 break;
             case 2:
+                break;
             case 3:
-                /*
-                 * Generate the initial harmonics array.
-                 */
-
+                /* Generate the initial harmonics array. */
                 data_1 = new_data_struct_1(quantity);
                 data_1 = gen_harmonics(data_1, start, quantity);
 
-                /*
-                 * Generate the subdivisions of each harmonic.
-                 */
-
+                /* Generate the subdivisions of each harmonic. */
                 data_2 = new_data_struct_2(quantity, divisions);
                 data_2 = gen_subs(data_1, data_2, quantity, divisions);
-                free(data_1);
+                free_memory(data_1);
 
+                /* Output to screen */
                 print_data(data_2, quantity, divisions);
-                free(data_2);
+                free_memory(data_2);
                 break;
             case 4:
                 break;

@@ -3,9 +3,13 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include "I01-inf_series.h"
 
+/*
+ * graphic_bar()
+ *
+ * Does what it says.
+ */
 void graphic_bar()
 {
     printf("\n");
@@ -16,7 +20,7 @@ void graphic_bar()
 /*
  * Pause()
  *
- * A function used for testing the code.
+ * Used for testing the code; also does wht it says.
  */
 
 void pause()

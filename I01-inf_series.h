@@ -5,7 +5,9 @@
  */
 
 /*****************************************************************************
- * Program structures.
+ *                                                                           *
+ * Program structures.                                                       *
+ *                                                                           *
  *****************************************************************************/
 
 /*
@@ -46,18 +48,21 @@ struct calculation
 typedef struct calculation  calc;
 
 /*****************************************************************************
- * Function defanitions.
+ *                                                                           *
+ * Function definitions.                                                     *
+ *                                                                           *
  *****************************************************************************/
 
-/* calc */
+/* data.calc */
 
 harmonic* gen_harmonics(harmonic* harm_series, int start, int quantity);
 calc* gen_subs(harmonic *harmonics, calc *divisions, int quantity, int divs);
 
-/* data */
+/* data.memory */
 
 harmonic* new_data_struct_1(int quant);
 calc* new_data_struct_2(int quant, int divisions);
+void free_memory(void *data);
 
 /* input */
 

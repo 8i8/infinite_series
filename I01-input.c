@@ -8,17 +8,7 @@
 #include "I01-inf_series.h"
 
 /*
- * Create input offset for display reasons.
- */
-
-void off_set_param(int* start, int* quantity)
-{
-    start = start - 1;
-    quantity = quantity + 1;
-}
-
-/*
- * Choice for switch statment.
+ * Retrieve choice for switch statement.
  */
 
 void get_choice(int* choice)

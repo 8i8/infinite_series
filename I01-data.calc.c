@@ -1,9 +1,18 @@
 /*
- * Data calculation through itteration of two loops.
+ * Data calculation by way of the itteration of two loops.
  */
 
-#include <stdio.h>
 #include "I01-inf_series.h"
+
+/*
+ * Create input offset for display reasons.
+ */
+
+void off_set_param(int* start, int* quantity)
+{
+    start = start - 1;
+    quantity = quantity + 1;
+}
 
 /*
  * Generate an array of harmonic series of the required length within the

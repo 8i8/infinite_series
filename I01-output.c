@@ -7,7 +7,7 @@
 
 
 /*
- * Print harmonic array.
+ * Output harmonic array, used in testing.
  */
 
 void print_harmonics(harmonic* harm_series, int quantity)
@@ -20,7 +20,7 @@ void print_harmonics(harmonic* harm_series, int quantity)
 }
 
 /*
- * Print divisions, calc data struct.
+ * Output full calculated data struct.
  */
 
 void print_data(calc* divisions, int quantity, int divs)

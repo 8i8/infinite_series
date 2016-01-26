@@ -35,3 +35,12 @@ calc* new_data_struct_2(int quant, int divisions)
     }
     return _new;
 }
+
+/*
+ * free memory.
+ */
+
+void free_memory(void *data)
+{
+    free(data);
+}
