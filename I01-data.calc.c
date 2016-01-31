@@ -10,8 +10,8 @@
 
 void off_set_param(int* start, int* quantity)
 {
-    start = start - 1;
-    quantity = quantity + 1;
+    *start    = *start    - 1;
+    *quantity = *quantity + 1;
 }
 
 /*

@@ -25,18 +25,10 @@ int main (int argc, char *argv[])
      * Program header request increments and other data.
      */
 
+    init_scr();
+
     for (;;)
     {
-
-        graphic_bar();
-        printf("                  x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)\n");
-        printf("\n");
-        printf("Please choose an option:\n");
-        printf("    1). Set paramiters start and length of calc.\n");
-        printf("    2). Set number of divisions.\n");
-        printf("    3). Print to screen.\n");
-        printf("    4). Exit.\n");
-        graphic_bar();
 
         get_choice(&choice);
 
@@ -46,6 +38,7 @@ int main (int argc, char *argv[])
                 /* Get parameters */
                 get_parameters(&start, &quantity, &divisions);
                 off_set_param(&start, &quantity);
+                show_var(&start, &quantity, &divisions);
                 /* Generate the initial harmonics array. */
                 data_1 = gen_data_1(&start, &quantity);
                 /* Generate the subdivisions of each harmonic. */
@@ -55,6 +48,7 @@ int main (int argc, char *argv[])
             case 2:
                 /* Request divisions */
                 get_divisions(&divisions);
+                show_var(&start, &quantity, &divisions);
 
                 if (start > 0 && quantity > 0)
                 {
@@ -84,8 +78,11 @@ int main (int argc, char *argv[])
 
     }
 
-    free_memory(data_1);
-    free_memory(data_2);
+    if (quantity != 0)
+    {
+        free_memory(data_1);
+        free_memory(data_2);
+    }
 
     return 0;
 

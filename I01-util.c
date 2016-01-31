@@ -6,18 +6,6 @@
 #include "I01-inf_series.h"
 
 /*
- * graphic_bar()
- *
- * Does what it says.
- */
-void graphic_bar()
-{
-    printf("\n");
-    printf("===============================================================================\n");
-    printf("\n");
-}
-
-/*
  * Pause()
  *
  * Used for testing the code; also does wht it says.

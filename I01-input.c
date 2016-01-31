@@ -4,7 +4,7 @@
  * propagated.
  */
 
-#include <stdio.h>
+#include <ncurses.h>
 #include "I01-inf_series.h"
 
 /*
@@ -13,7 +13,9 @@
 
 void get_choice(int* choice)
 {
-    scanf(" %d", &(*choice));
+    disp_menu();
+    scanw(" %d", &(*choice));
+    clear();
 }
 
 /*
@@ -22,15 +24,18 @@ void get_choice(int* choice)
 
 void get_parameters(int *start, int *quantity, int *divisions)
 {
-    printf("Start harmonic: ");
-    fflush(stdin);
-    scanf(" %d", &(*start));
-    printf("Quantity of harmonics: ");
-    fflush(stdin);
-    scanf(" %d", &(*quantity));
-    printf("Quantity of divisions: ");
-    fflush(stdin);
-    scanf(" %d", &(*divisions));
+    disp_menu();
+    printw("Start harmonic: ");
+    scanw(" %d", &(*start));
+    clear();
+    disp_menu();
+    printw("Quantity of harmonics: ");
+    scanw(" %d", &(*quantity));
+    clear();
+    disp_menu();
+    printw("Quantity of divisions: ");
+    scanw(" %d", &(*divisions));
+    clear();
 }
 
 /*
@@ -39,7 +44,8 @@ void get_parameters(int *start, int *quantity, int *divisions)
 
 void get_divisions(int* divisions)
 {
-    printf("Quantity of divisions: ");
-    fflush(stdin);
-    scanf(" %d", &(*divisions));
+    disp_menu();
+    printw("Quantity of divisions: ");
+    scanw(" %d", &(*divisions));
+    clear();
 }
