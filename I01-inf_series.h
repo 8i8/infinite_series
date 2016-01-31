@@ -84,6 +84,3 @@ void print_data(calc* divisions, int quantity, int divs);
 void graphic_bar();
 void show_var(int *start, int *quantity, int *divisions);
 
-/* util */
-
-void pause();
