@@ -105,3 +105,4 @@ calc* gen_subs(harmonic *harmonics, calc *divisions, int quantity, int divs)
     return divisions;
 
 }
+

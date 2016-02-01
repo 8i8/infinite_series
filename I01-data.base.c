@@ -20,11 +20,9 @@ void get_param()
     get_parameters(&start, &quantity, &divisions);
     off_set_param(&start, &quantity);
     show_var(&start, &quantity, &divisions);
-    /* Generate the initial harmonics array. */
-    data_1 = gen_data_1(&start, &quantity);
-    /* Generate the subdivisions of each harmonic. */
-    data_2 = gen_data_2(data_1, &quantity, & divisions);
-    print_data(data_2, quantity, divisions);
+
+    generate_data();
+    echo_out();
 }
 
 /*
@@ -36,11 +34,23 @@ void change_div()
     get_divisions(&divisions);
     show_var(&start, &quantity, &divisions);
 
-    if (start > 0 && quantity > 0)
-    {
-        data_2 = gen_data_2(data_1, &quantity, & divisions);
-        print_data(data_2, quantity, divisions);
-    }
+    generate_data();
+    echo_out();
+}
+
+/*
+ * Fill data structures.
+ */
+
+void generate_data()
+{
+    free_all();
+
+    /* Generate the initial harmonics array. */
+    data_1 = gen_data_1(&start, &quantity);
+    /* Generate the subdivisions of each harmonic. */
+    data_2 = gen_data_2(data_1, &quantity, & divisions);
+    print_data(data_2, quantity, divisions);
 }
 
 /*
@@ -51,17 +61,20 @@ void echo_out()
 {
     if (quantity > 0 && divisions > 0)
     {
-        /* Generate the initial harmonics array. */
-        data_1 = gen_data_1(&start, &quantity);
-        /* Generate the subdivisions of each harmonic. */
-        data_2 = gen_data_2(data_1, &quantity, & divisions);
         /* Print to screen. */
         print_data(data_2, quantity, divisions);
     }
 }
 
-void quit_prg()
+void free_all()
 {
     free_memory(data_1);
     free_memory(data_2);
 }
+
+void quit_prg()
+{
+    close_scr();
+    free_all();
+}
+

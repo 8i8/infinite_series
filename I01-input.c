@@ -49,3 +49,4 @@ void get_divisions(int* divisions)
     scanw(" %d", &(*divisions));
     clear();
 }
+

@@ -2,7 +2,6 @@
  * Data structures and memory allocation for program data.
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include "I01-inf_series.h"
 
@@ -15,7 +14,7 @@ harmonic* new_data_struct_1(int quant)
     harmonic* _new = malloc((quant+1) * sizeof(harmonic));
     if (_new == NULL)
     {
-        printf("Memory allocation error");
+        mem_error();
         exit(1);
     }
     return _new;
@@ -30,7 +29,7 @@ calc* new_data_struct_2(int quant, int divisions)
     calc* _new = malloc(quant * divisions * sizeof(calc));
     if (_new == NULL)
     {
-        printf("Memory allocation error");
+        mem_error();
         exit(1);
     }
     return _new;
@@ -72,5 +71,7 @@ calc* gen_data_2(harmonic* data_1, int* quantity, int* divisions)
 
 void free_memory(void *data)
 {
-    free(data);
+    if (data != NULL)
+        free(data);
 }
+

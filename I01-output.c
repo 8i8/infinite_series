@@ -105,3 +105,14 @@ void print_data(calc* divisions, int quantity, int divs)
     clear();
 
 }
+
+void mem_error()
+{
+    printw("Memory allocation error ...");
+}
+
+void close_scr()
+{
+    endwin();
+}
+
