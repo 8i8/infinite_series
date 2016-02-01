@@ -12,7 +12,7 @@
 
 void get_choice(int* choice)
 {
-    char    question[5] = "~~~ ";
+    char    question[5] = ":~£ ";
 
     n_get_int(&(*choice), question);
 }
