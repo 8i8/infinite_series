@@ -77,7 +77,6 @@ void free_memory(void *data);
 
 /* input */
 
-void init_scr();
 void off_set_param(int* start, int* quantity);
 void get_choice(int* choice);
 void get_parameters(int *start, int *quantity, int *divisions);
@@ -87,10 +86,17 @@ void close_scr();
 /* output */
 
 void disp_menu();
-void print_harmonics(harmonic* harm_series, int quantity);
-void print_data(calc* divisions, int quantity, int divs);
-void graphic_bar();
+void print_harmonics(harmonic* harm_series, int* quantity);
+void print_data(calc* divisions, int* quantity, int* divs);
 void show_var(int *start, int *quantity, int *divisions);
-void mem_error();
 void close_scr();
+
+/* IO.ncurses */
+
+void init_scr();
+void mem_error();
+void n_get_int(int* number, char* string);
+void graphic_bar();
+void n_print_data(calc* divisions, int* quantity, int* divs);
+void n_print_harmonics(harmonic* harm_series, int* quantity);
 

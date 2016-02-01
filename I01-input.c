@@ -4,7 +4,6 @@
  * propagated.
  */
 
-#include <ncurses.h>
 #include "I01-inf_series.h"
 
 /*
@@ -13,9 +12,9 @@
 
 void get_choice(int* choice)
 {
-    disp_menu();
-    scanw(" %d", &(*choice));
-    clear();
+    char    question[5] = "~~~ ";
+
+    n_get_int(&(*choice), question);
 }
 
 /*
@@ -24,18 +23,13 @@ void get_choice(int* choice)
 
 void get_parameters(int *start, int *quantity, int *divisions)
 {
-    disp_menu();
-    printw("Start harmonic: ");
-    scanw(" %d", &(*start));
-    clear();
-    disp_menu();
-    printw("Quantity of harmonics: ");
-    scanw(" %d", &(*quantity));
-    clear();
-    disp_menu();
-    printw("Quantity of divisions: ");
-    scanw(" %d", &(*divisions));
-    clear();
+    char    question1[17] = "Start harmonic: ";
+    char    question2[24] = "Quantity of harmonics: ";
+    char    question3[24] = "Quantity of divisions: ";
+
+    n_get_int(&(*start),     question1);
+    n_get_int(&(*quantity),  question2);
+    n_get_int(&(*divisions), question3);
 }
 
 /*
@@ -44,9 +38,8 @@ void get_parameters(int *start, int *quantity, int *divisions)
 
 void get_divisions(int* divisions)
 {
-    disp_menu();
-    printw("Quantity of divisions: ");
-    scanw(" %d", &(*divisions));
-    clear();
+    char    question3[24] = "Quantity of divisions: ";
+
+    n_get_int(&(*divisions), question3);
 }
 

@@ -50,7 +50,7 @@ void generate_data()
     data_1 = gen_data_1(&start, &quantity);
     /* Generate the subdivisions of each harmonic. */
     data_2 = gen_data_2(data_1, &quantity, & divisions);
-    print_data(data_2, quantity, divisions);
+    print_data(data_2, &quantity, &divisions);
 }
 
 /*
@@ -62,7 +62,7 @@ void echo_out()
     if (quantity > 0 && divisions > 0)
     {
         /* Print to screen. */
-        print_data(data_2, quantity, divisions);
+        print_data(data_2, &quantity, &divisions);
     }
 }
 
