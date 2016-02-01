@@ -5,6 +5,8 @@
 #include <ncurses.h>
 #include "I01-inf_series.h"
 
+#define Nelts(a)      (sizeof(a)/sizeof(a[0]))
+
 /*--------------------------------------------------------------------------*
  * Program functionality
  *--------------------------------------------------------------------------*/
@@ -16,6 +18,106 @@
 void init_scr()
 {
     initscr();
+    cbreak();
+    keypad(stdscr, TRUE);
+}
+
+/*
+ * Windows and pads.
+ */
+
+WINDOW* new_window(int height, int width, int y, int x)
+{
+    WINDOW* local_win;
+
+    local_win = newwin(height, width, y, x);
+    wrefresh(local_win);
+    return local_win;
+}
+
+WINDOW* new_sub_window(WINDOW *orig, int height, int width, int y, int x)
+{
+    WINDOW* local_win;
+
+    local_win = subwin(orig, height, width, y, x);
+    wrefresh(local_win);
+    return local_win;
+}
+
+WINDOW* new_pad(int nlines, int ncols)
+{
+    WINDOW* local_pad;
+    local_pad = newpad(nlines, ncols);
+    return local_pad;
+}
+
+void make_window(calc* divisions, int* quantity, int* divs)
+{
+    WINDOW* my_pad;
+    WINDOW* my_sub_win;
+
+    int     width,
+            height,
+            max_y,
+            max_x,
+            y      = 2,
+            x      = 4;
+
+    int     nlines = (((*quantity)-1) * (*divs) + 1),
+            ncols;
+
+    int     i,
+            c,
+            start = 0;
+
+    clear();
+
+    getmaxyx(stdscr, max_y, max_x);
+
+    height = max_y - (2 * y);
+    width  = max_x - (2 * x);
+    ncols  = max_x;
+
+    my_pad = newpad(nlines, ncols);
+    my_sub_win = new_sub_window(my_pad, height, width, y, x);
+    mvprintw(LINES - 2, 0, "Use the Up/Down arrows to scroll.\nF1 to Exit");
+
+    refresh();
+
+    for (i = 1; i < (((*quantity)-1) * (*divs) + 1); i++)
+    {
+        mvwprintw(my_pad, i, 1, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
+                                                        divisions[i].harmonic,
+                                                        divisions[i].harmonic,
+                                                        divisions[i].fraction,
+                                                        divs,
+                                                        divisions[i].value); 
+    }
+
+    touchwin(my_pad);
+
+    /*
+     * Refresh pad.
+     *
+     * int prefresh(WINDOW *pad, int pminrow, int pmincol, int sminrow,
+     *                                  int smincol, int smaxrow, int smaxcol);
+     */
+
+    prefresh(my_pad, start, 0, y+1, x+1, height, width);
+
+    while((c = getch()) != KEY_F(1))
+    {   switch(c)
+        {   case KEY_DOWN:
+                prefresh(my_pad, start++, 0, y+1, x+1, height, width);
+                break;
+            case KEY_UP:
+                prefresh(my_pad, start--, 0, y+1, x+1, height, width);
+                break;
+        }
+    }       
+    delwin(my_pad);
+    delwin(my_sub_win);
+    endwin();
 }
 
 /*
@@ -36,33 +138,110 @@ void close_scr()
     endwin();
 }
 
+void p_refresh()
+{
+    refresh();
+    disp_menu();
+}
+
+/*--------------------------------------------------------------------------*
+ * Menu
+ *--------------------------------------------------------------------------*/
+
+/*
+ * Structure and its array to hold the name and function pointer of the menu
+ * options.
+ */
+
+static struct
+{
+    char*   string;
+    void    (*func)(void);
+}
+    menu_opts[] = 
+{
+    {"Set paramiters start and length of calc.",   get_param       },
+    {"Set number of divisions.",                   change_div      },
+    {"Print harmonic series.",                     echo_harmonics  },
+    {"Print series with divisions.",               echo_out        },
+    {"Exit.",                                      quit_prg        }
+};
+
+/*
+ * Display the full menu screen ONCE, then prompt for a choice and call the
+ * appropriate function.
+ */
+
+void n_disp_menu(int* sta, int* qua, int* div)
+{
+    int     i;
+
+    printw("===============================================================================\n");
+    printw("                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)\n");
+    printw("\n");
+    printw("Please choose an option:\n");
+
+    /*
+     * Display the menu.
+     */
+
+    for (i = 0; i < Nelts(menu_opts); i++)
+        printw("    %2d). %s\n", i+1, menu_opts[i].string);
+
+    printw("                                   sta = %d qua = %d div = %d\n", *sta, *qua, *div);
+    printw("===============================================================================\n");
+    refresh();
+}
+
 /*--------------------------------------------------------------------------*
  * Input
  *--------------------------------------------------------------------------*/
 
+/*
+ * Get menu selection.
+ */
+
+void get_choice()
+{
+    int     choice;
+
+    /*
+     * Loop until they enter a valid choice.
+     */
+
+    for (;;)
+    {
+        scanw("%d", &choice);
+        if (choice > 0 && choice <= Nelts(menu_opts))
+            break;
+        printw("Invalid Selection");
+    }
+
+    clear();
+    disp_menu();
+
+    /*
+     * Call the function via the function pointer.
+     */
+
+    menu_opts[choice-1].func();
+}
+
+/*
+ * Get calc intagers.
+ */
+
 void n_get_int(int* number, char string[])
 {
-    disp_menu();
     printw("%s", string);
     scanw("%d", &(*number));
+    refresh();
     clear();
 }
 
 /*--------------------------------------------------------------------------*
  * Output
  *--------------------------------------------------------------------------*/
-
-/*
- * graphic_bar()
- *
- * Does what it says.
- */
-
-void graphic_bar()
-{
-    printw("===============================================================================\n");
-    refresh();
-}
 
 /*
  * Output harmonic array, used in testing.
@@ -72,12 +251,18 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 {
     int     i;
 
+    disp_menu();
+
     for (i = 1; i <= (*quantity); i++)
     {
         printw("From the print function %2d >>> %.16f\n", harm_series[i].id,
                                                           harm_series[i].value);
-    refresh();
     }
+
+    refresh();
+    getch();
+    clear();
+
 }
 
 /*
@@ -95,7 +280,7 @@ void n_print_data(calc* divisions, int* quantity, int* divs)
         printw("%-4d z=z+1/%-4d %4d of %d -> %.15f\n",  divisions[i].harmonic,
                                                         divisions[i].harmonic,
                                                         divisions[i].fraction,
-                                                        divs,
+                                                        *divs,
                                                         divisions[i].value); 
     }
 

@@ -57,6 +57,15 @@ void generate_data()
  * Echo to calc to screen.
  */
 
+void echo_harmonics()
+{
+    if (quantity > 0 && divisions > 0)
+    {
+        /* Print to screen. */
+        print_harmonics(data_1, &quantity);
+    }
+}
+
 void echo_out()
 {
     if (quantity > 0 && divisions > 0)

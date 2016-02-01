@@ -13,41 +13,13 @@
 
 int main (int argc, char *argv[])
 {
-    int     choice;
-
     /*
      * Program header request increments and other data.
      */
 
     init_scr();
-
-    for (;;)
-    {
-
-        get_choice(&choice);
-
-        switch (choice)
-        {
-            case 1:
-                get_param();
-                break;
-            case 2:
-                change_div();
-                break;
-            case 3:
-                echo_out();
-                break;
-            case 4:
-                quit_prg();
-                break;
-            default:
-                continue;
-        }
-
-        if (choice == 4)
-            break;
-
-    }
+    disp_menu();
+    get_choice();
 
     return 0;
 

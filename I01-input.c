@@ -7,17 +7,6 @@
 #include "I01-inf_series.h"
 
 /*
- * Retrieve choice for switch statement.
- */
-
-void get_choice(int* choice)
-{
-    char    question[5] = ":~£ ";
-
-    n_get_int(&(*choice), question);
-}
-
-/*
  * Request and obtain user parameters.
  */
 
@@ -28,8 +17,11 @@ void get_parameters(int *start, int *quantity, int *divisions)
     char    question3[24] = "Quantity of divisions: ";
 
     n_get_int(&(*start),     question1);
+    p_refresh();
     n_get_int(&(*quantity),  question2);
+    p_refresh();
     n_get_int(&(*divisions), question3);
+    p_refresh();
 }
 
 /*
