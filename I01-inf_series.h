@@ -53,6 +53,13 @@ typedef struct calculation  calc;
  *                                                                           *
  *****************************************************************************/
 
+/* data.base */
+
+void get_param();
+void change_div();
+void echo_out();
+void quit_prg();
+
 /* data.calc */
 
 harmonic* gen_harmonics(harmonic* harm_series, int start, int quantity);
@@ -73,8 +80,6 @@ void off_set_param(int* start, int* quantity);
 void get_choice(int* choice);
 void get_parameters(int *start, int *quantity, int *divisions);
 void get_divisions();
-
-/* main */
 
 /* output */
 
