@@ -246,7 +246,7 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 
     for (i = 1; i <= (*quantity); i++)
     {
-        mvprintw(my_pad, i, 1 , "From the print function %2d >>> %.16f\n",
+        mvwprintw(my_pad, i, 1, "From the print function %2d >>> %.16f\n",
                                                         harm_series[i].id,
                                                         harm_series[i].value);
     }
