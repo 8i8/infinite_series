@@ -87,13 +87,13 @@ void get_divisions();
 /* IO.ncurses */
 
 void init_scr();
+void mem_error();
+void close_curses();
 WINDOW* new_window(int height, int width, int y, int x);
 WINDOW* new_sub_window(WINDOW *orig, int height, int width, int y, int x);
 WINDOW* new_pad(int nlines, int ncols);
 void make_window();
 void scroll_pad(WINDOW* _pad);
-void mem_error();
-void close_curses();
 void n_disp_menu(int* sta, int* qua, int* div);
 void get_choice();
 void n_get_int(int* number, char* string);

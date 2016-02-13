@@ -33,8 +33,28 @@ void init_scr()
 }
 
 /*
- * Windows and pads.
+ * Display memory allocation failure.
  */
+
+void mem_error()
+{
+    printw("Memory allocation error ...");
+}
+
+/*
+ * Close ncurses window.
+ */
+
+void close_curses()
+{
+    delwin(my_pad);
+    delwin(my_sub_win);
+    endwin();
+}
+
+/*--------------------------------------------------------------------------*
+ * Windows and pads.
+ *--------------------------------------------------------------------------*/
 
 WINDOW* new_window(int height, int width, int y, int x)
 {
@@ -114,26 +134,6 @@ void scroll_pad(WINDOW* _pad)
     disp_menu();       
     get_choice();
 
-}
-
-/*
- * Display memory allocation failure.
- */
-
-void mem_error()
-{
-    printw("Memory allocation error ...");
-}
-
-/*
- * Close ncurses window.
- */
-
-void close_curses()
-{
-    delwin(my_pad);
-    delwin(my_sub_win);
-    endwin();
 }
 
 /*--------------------------------------------------------------------------*
