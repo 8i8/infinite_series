@@ -17,11 +17,11 @@ void get_parameters(int *start, int *quantity, int *divisions)
     char    question3[24] = "Quantity of divisions: ";
 
     n_get_int(&(*start),     question1);
-    p_refresh();
+    disp_menu();
     n_get_int(&(*quantity),  question2);
-    p_refresh();
+    disp_menu();
     n_get_int(&(*divisions), question3);
-    p_refresh();
+    disp_menu();
 }
 
 /*

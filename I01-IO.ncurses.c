@@ -7,6 +7,9 @@
 
 #define Nelts(a)      (sizeof(a)/sizeof(a[0]))
 
+static WINDOW* my_pad;
+static WINDOW* my_sub_win;
+
 /*--------------------------------------------------------------------------*
  * Program functionality
  *--------------------------------------------------------------------------*/
@@ -53,9 +56,6 @@ WINDOW* new_pad(int nlines, int ncols)
 
 void make_window(calc* divisions, int* quantity, int* divs)
 {
-    WINDOW* my_pad;
-    WINDOW* my_sub_win;
-
     int     width,
             height,
             max_y,
@@ -94,7 +94,7 @@ void make_window(calc* divisions, int* quantity, int* divs)
                                                         divisions[i].value); 
     }
 
-    touchwin(my_pad);
+    wrefresh(my_pad);
 
     /*
      * Refresh pad.
@@ -114,10 +114,14 @@ void make_window(calc* divisions, int* quantity, int* divs)
                 prefresh(my_pad, start--, 0, y+1, x+1, height, width);
                 break;
         }
-    }       
+    }
+
     delwin(my_pad);
     delwin(my_sub_win);
-    endwin();
+    clear();
+    disp_menu();       
+    get_choice();
+
 }
 
 /*
@@ -133,15 +137,11 @@ void mem_error()
  * Close ncurses window.
  */
 
-void close_scr()
+void close_curses()
 {
+    delwin(my_pad);
+    delwin(my_sub_win);
     endwin();
-}
-
-void p_refresh()
-{
-    refresh();
-    disp_menu();
 }
 
 /*--------------------------------------------------------------------------*
@@ -190,7 +190,6 @@ void n_disp_menu(int* sta, int* qua, int* div)
 
     printw("                                   sta = %d qua = %d div = %d\n", *sta, *qua, *div);
     printw("===============================================================================\n");
-    refresh();
 }
 
 /*--------------------------------------------------------------------------*
@@ -214,7 +213,9 @@ void get_choice()
         scanw("%d", &choice);
         if (choice > 0 && choice <= Nelts(menu_opts))
             break;
-        printw("Invalid Selection");
+        printw("Invalid Selection.\n");
+        clear();
+        disp_menu();
     }
 
     clear();
@@ -225,6 +226,7 @@ void get_choice()
      */
 
     menu_opts[choice-1].func();
+
 }
 
 /*
@@ -268,25 +270,4 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 /*
  * Output full calculated data struct.
  */
-
-void n_print_data(calc* divisions, int* quantity, int* divs)
-{
-    int     i;
-
-    disp_menu();
-
-    for (i = 1; i < (((*quantity)-1) * (*divs) + 1); i++)
-    {
-        printw("%-4d z=z+1/%-4d %4d of %d -> %.15f\n",  divisions[i].harmonic,
-                                                        divisions[i].harmonic,
-                                                        divisions[i].fraction,
-                                                        *divs,
-                                                        divisions[i].value); 
-    }
-
-    refresh();
-    getch();
-    clear();
-
-}
 

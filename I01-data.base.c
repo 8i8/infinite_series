@@ -83,7 +83,7 @@ void free_all()
 
 void quit_prg()
 {
-    close_scr();
+    close_curses();
     free_all();
 }
 
