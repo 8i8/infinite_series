@@ -273,7 +273,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
                                                         divisions[i].harmonic,
                                                         divisions[i].harmonic,
                                                         divisions[i].fraction,
-                                                        divs,
+                                                        *divs,
                                                         divisions[i].value); 
     }
 
