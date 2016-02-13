@@ -244,17 +244,14 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 {
     int     i;
 
-    disp_menu();
-
     for (i = 1; i <= (*quantity); i++)
     {
-        printw("From the print function %2d >>> %.16f\n", harm_series[i].id,
-                                                          harm_series[i].value);
+        mvprintw(my_pad, i, 1 , "From the print function %2d >>> %.16f\n",
+                                                        harm_series[i].id,
+                                                        harm_series[i].value);
     }
 
-    refresh();
-    getch();
-    clear();
+    scroll_pad(my_pad);
 
 }
 
@@ -264,7 +261,6 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 
 void n_print_calc(calc* divisions, int* quantity, int* divs)
 {
-
     int     i;
 
     for (i = 1; i < (((*quantity)-1) * (*divs) + 1); i++)
