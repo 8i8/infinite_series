@@ -2,6 +2,7 @@
  * Menu options.
  */
 
+#include <stdlib.h>
 #include "I01-inf_series.h"
 
 static    harmonic*   data_1;
@@ -85,5 +86,6 @@ void quit_prg()
 {
     close_curses();
     free_all();
+    exit(0);
 }
 

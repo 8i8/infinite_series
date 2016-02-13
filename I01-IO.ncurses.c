@@ -156,7 +156,7 @@ static struct
     {"Set number of divisions.",                   change_div       },
     {"Print harmonic series.",                     echo_harmonics   },
     {"Print series with divisions.",               echo_out         },
-    {"Exit.",                                                       }
+    {"Exit.",                                      quit_prg         }
 };
 
 /*
@@ -207,8 +207,6 @@ void get_choice()
         if (choice > 0 && choice <= Nelts(menu_opts))
             break;
         printw("Invalid Selection.\n");
-        clear();
-        disp_menu();
     }
 
     clear();
