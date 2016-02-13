@@ -7,8 +7,15 @@
 
 #define Nelts(a)      (sizeof(a)/sizeof(a[0]))
 
-static WINDOW* my_pad;
-static WINDOW* my_sub_win;
+static WINDOW*  my_pad;
+static WINDOW*  my_sub_win;
+
+static int      width,
+                height,
+                max_y,
+                max_x,
+                y      = 2,
+                x      = 4;
 
 /*--------------------------------------------------------------------------*
  * Program functionality
@@ -56,19 +63,8 @@ WINDOW* new_pad(int nlines, int ncols)
 
 void make_window(calc* divisions, int* quantity, int* divs)
 {
-    int     width,
-            height,
-            max_y,
-            max_x,
-            y      = 2,
-            x      = 4;
-
     int     nlines = (((*quantity)-1) * (*divs) + 1),
             ncols;
-
-    int     i,
-            c,
-            start = 0;
 
     clear();
 
@@ -81,21 +77,17 @@ void make_window(calc* divisions, int* quantity, int* divs)
     my_pad = newpad(nlines, ncols);
     my_sub_win = new_sub_window(my_pad, height, width, y, x);
     mvprintw(LINES - 2, 0, "Use the Up/Down arrows to scroll.\nF1 to Exit");
-
     refresh();
+}
 
-    for (i = 1; i < (((*quantity)-1) * (*divs) + 1); i++)
-    {
-        mvwprintw(my_pad, i, 1, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
-                                                        divisions[i].harmonic,
-                                                        divisions[i].harmonic,
-                                                        divisions[i].fraction,
-                                                        divs,
-                                                        divisions[i].value); 
-    }
+/*
+ * Scroll pad display.
+ */
 
-    wrefresh(my_pad);
-
+void scroll_pad(WINDOW* _pad)
+{
+    int     c,
+            start = 0;
     /*
      * Refresh pad.
      *
@@ -103,15 +95,15 @@ void make_window(calc* divisions, int* quantity, int* divs)
      *                                  int smincol, int smaxrow, int smaxcol);
      */
 
-    prefresh(my_pad, start, 0, y+1, x+1, height, width);
+    prefresh(_pad, start, 0, y+1, x+1, height, width);
 
     while((c = getch()) != KEY_F(1))
     {   switch(c)
         {   case KEY_DOWN:
-                prefresh(my_pad, start++, 0, y+1, x+1, height, width);
+                prefresh(_pad, start++, 0, y+1, x+1, height, width);
                 break;
             case KEY_UP:
-                prefresh(my_pad, start--, 0, y+1, x+1, height, width);
+                prefresh(_pad, start--, 0, y+1, x+1, height, width);
                 break;
         }
     }
@@ -270,4 +262,23 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 /*
  * Output full calculated data struct.
  */
+
+void n_print_calc(calc* divisions, int* quantity, int* divs)
+{
+
+    int     i;
+
+    for (i = 1; i < (((*quantity)-1) * (*divs) + 1); i++)
+    {
+        mvwprintw(my_pad, i, 1, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
+                                                        divisions[i].harmonic,
+                                                        divisions[i].harmonic,
+                                                        divisions[i].fraction,
+                                                        divs,
+                                                        divisions[i].value); 
+    }
+
+    scroll_pad(my_pad);
+
+}
 

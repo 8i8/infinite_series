@@ -47,5 +47,6 @@ void print_harmonics(harmonic* harm_series, int* quantity)
 void print_data(calc* divisions, int* quantity, int* divs)
 {
     make_window(divisions, quantity, divs);
+    n_print_calc(divisions, quantity, divs);
 }
 
