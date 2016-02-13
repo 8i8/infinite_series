@@ -20,6 +20,7 @@ int main (int argc, char *argv[])
     init_scr();
     disp_menu();
     get_choice();
+    quit_prg();
 
     return 0;
 

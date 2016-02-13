@@ -47,8 +47,8 @@ void mem_error()
 
 void close_curses()
 {
-    delwin(my_pad);
-    delwin(my_sub_win);
+    clear();
+    refresh();
     endwin();
 }
 
@@ -152,11 +152,11 @@ static struct
 }
     menu_opts[] = 
 {
-    {"Set paramiters start and length of calc.",   get_param       },
-    {"Set number of divisions.",                   change_div      },
-    {"Print harmonic series.",                     echo_harmonics  },
-    {"Print series with divisions.",               echo_out        },
-    {"Exit.",                                      quit_prg        }
+    {"Set paramiters start and length of calc.",   get_param        },
+    {"Set number of divisions.",                   change_div       },
+    {"Print harmonic series.",                     echo_harmonics   },
+    {"Print series with divisions.",               echo_out         },
+    {"Exit.",                                                       }
 };
 
 /*
@@ -182,6 +182,7 @@ void n_disp_menu(int* sta, int* qua, int* div)
 
     printw("                                   sta = %d qua = %d div = %d\n", *sta, *qua, *div);
     printw("===============================================================================\n");
+    refresh();
 }
 
 /*--------------------------------------------------------------------------*
