@@ -5,7 +5,8 @@
 #include <ncurses.h>
 #include "I01-inf_series.h"
 
-#define Nelts(a)      (sizeof(a)/sizeof(a[0]))
+#define PAD_WIDTH       60
+#define Nelts(a)        (sizeof(a)/sizeof(a[0]))
 
 static WINDOW*  my_win;
 static WINDOW*  my_pad;
@@ -15,7 +16,7 @@ static int      width,
                 height,
                 max_y,
                 max_x,
-                y = 12,
+                y = 10,
                 x = 4;
 
 /*--------------------------------------------------------------------------*
@@ -82,15 +83,14 @@ WINDOW* new_pad(int nlines, int ncols)
     return local_pad;
 }
 
-void make_window(nlines, ncols)
+void make_window(int* length)
 {
     getmaxyx(stdscr, max_y, max_x);
 
-    height = max_y - y;
+    height = max_y - 4;
     width  = max_x - (2 * x);
 
-    ncols  = width - 2;
-    my_pad = newpad(nlines, ncols);
+    my_pad = newpad(*length, PAD_WIDTH);
     my_sub_win = new_sub_window(my_pad, height, width, y, x);
 
     mvprintw(LINES - 3, 2, "Use the Up/Down arrows to scroll.");
@@ -174,20 +174,23 @@ void n_disp_menu(int* sta, int* qua, int* div)
 {
     int     i;
 
-    mvwprintw(my_win, 1, 2,"===============================================================================\n");
-    mvwprintw(my_win, 2, 2,"                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)\n");
-    mvwprintw(my_win, 3, 2,"\n");
-    mvwprintw(my_win, 4, 2,"Please choose an option:\n");
+    mvwprintw(my_win, 1, 2,
+    "===============================================================================");
+    mvwprintw(my_win, 2, 2,"                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
+    mvwprintw(my_win, 3, 2,"");
+    mvwprintw(my_win, 4, 2,"Please choose an option:");
 
     /*
      * Display the menu.
      */
 
     for (i = 0; i < Nelts(menu_opts); i++)
-        mvwprintw(my_win, (i+5), 2, "    %2d). %s\n", i+1, menu_opts[i].string);
+        mvwprintw(my_win, (i+5), 2, "    %2d). %s", i+1, menu_opts[i].string);
 
-    mvwprintw(my_win, (Nelts(menu_opts)+5), 2,"                                   sta = %d qua = %d div = %d\n", *sta, *qua, *div);
-    mvwprintw(my_win, (Nelts(menu_opts)+6), 2,"===============================================================================\n");
+    wprintw(my_win,
+    "                                       sta = %d qua = %d div = %d", *sta, *qua, *div);
+    mvwprintw(my_win, (Nelts(menu_opts)+5), 2,
+    "===============================================================================");
     box(my_win, 0, 0);
     wrefresh(my_win);
 }
@@ -210,7 +213,7 @@ void get_choice()
 
     for (;;)
     {
-        mvwscanw(my_win,(Nelts(menu_opts)+8), 2, "%d", &choice);
+        mvwscanw(my_win,(Nelts(menu_opts)+6), 2, "%d", &choice);
         if (choice > 0 && choice <= Nelts(menu_opts))
             break;
         wrefresh(my_win);
@@ -233,7 +236,7 @@ void get_choice()
 
 void n_get_int(int* number, char string[])
 {
-    mvwprintw(my_win, (Nelts(menu_opts)+7), 2, "%s", string);
+    mvwprintw(my_win, (Nelts(menu_opts)+6), 2, "%s", string);
     wscanw(my_win,"%d", &(*number));
     wrefresh(my_win);
     wclear(my_win);
@@ -268,7 +271,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 {
     int     i;
 
-    for (i = 1; i < (((*quantity)-1) * (*divs)); i++)
+    for (i = 1; i < (*quantity) * (*divs); i++)
     {
         mvwprintw(my_pad, i, 1, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
                                                         divisions[i].harmonic,
@@ -286,6 +289,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
      */
 
     prefresh(my_pad, 0, 0, y+1, x+1, height, width);
+    scroll_pad();
 
 }
 

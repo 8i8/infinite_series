@@ -1,5 +1,11 @@
 /*
  * Menu options.
+ *
+ *  {"Set paramiters start and length of calc.",   get_param        },
+ *  {"Set number of divisions.",                   change_div       },
+ *  {"Print harmonic series.",                     echo_harmonics   },
+ *  {"Print series with divisions.",               echo_out         },
+ *  {"Exit.",                                      quit_prg         }
  */
 
 #include <stdlib.h>

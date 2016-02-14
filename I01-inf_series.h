@@ -92,7 +92,7 @@ void close_curses();
 WINDOW* new_window(int height, int width, int y, int x);
 WINDOW* new_sub_window(WINDOW *orig, int height, int width, int y, int x);
 WINDOW* new_pad(int nlines, int ncols);
-void make_window();
+void make_window(int* length);
 void menu_window();
 void my_win_refresh();
 void my_pad_refresh();
