@@ -7,6 +7,7 @@
 
 #define Nelts(a)      (sizeof(a)/sizeof(a[0]))
 
+static WINDOW*  my_win;
 static WINDOW*  my_pad;
 static WINDOW*  my_sub_win;
 
@@ -14,8 +15,8 @@ static int      width,
                 height,
                 max_y,
                 max_x,
-                y      = 2,
-                x      = 4;
+                y = 12,
+                x = 4;
 
 /*--------------------------------------------------------------------------*
  * Program functionality
@@ -30,6 +31,7 @@ void init_scr()
     initscr();
     cbreak();
     keypad(stdscr, TRUE);
+    menu_window();
 }
 
 /*
@@ -38,7 +40,7 @@ void init_scr()
 
 void mem_error()
 {
-    printw("Memory allocation error ...");
+    wprintw(my_win,"Memory allocation error ...");
 }
 
 /*
@@ -47,8 +49,7 @@ void mem_error()
 
 void close_curses()
 {
-    clear();
-    refresh();
+    werase(my_win);
     endwin();
 }
 
@@ -81,56 +82,61 @@ WINDOW* new_pad(int nlines, int ncols)
     return local_pad;
 }
 
-void make_window(calc* divisions, int* quantity, int* divs)
+void make_window(nlines, ncols)
 {
-    int     nlines = (((*quantity)-1) * (*divs) + 1),
-            ncols;
-
-    clear();
-
     getmaxyx(stdscr, max_y, max_x);
 
-    height = max_y - (2 * y);
+    height = max_y - y;
     width  = max_x - (2 * x);
-    ncols  = max_x;
 
+    ncols  = width - 2;
     my_pad = newpad(nlines, ncols);
     my_sub_win = new_sub_window(my_pad, height, width, y, x);
-    mvprintw(LINES - 2, 0, "Use the Up/Down arrows to scroll.\nF1 to Exit");
-    refresh();
+
+    mvprintw(LINES - 3, 2, "Use the Up/Down arrows to scroll.");
+    mvprintw(LINES - 2, 2, "F1 to Exit");
+    wrefresh(my_sub_win);
+}
+
+void menu_window()
+{
+    getmaxyx(stdscr, max_y, max_x);
+    my_win = new_window( max_y, max_x, 0, 0);
+}
+
+void my_win_refresh()
+{
+    wrefresh(my_win);
+}
+
+void my_pad_refresh()
+{
+    prefresh(my_pad, 0, 0, y+1, x+1, height, width);
 }
 
 /*
  * Scroll pad display.
  */
 
-void scroll_pad(WINDOW* _pad)
+void scroll_pad()
 {
     int     c,
             start = 0;
-    /*
-     * Refresh pad.
-     *
-     * int prefresh(WINDOW *pad, int pminrow, int pmincol, int sminrow,
-     *                                  int smincol, int smaxrow, int smaxcol);
-     */
-
-    prefresh(_pad, start, 0, y+1, x+1, height, width);
 
     while((c = getch()) != KEY_F(1))
     {   switch(c)
         {   case KEY_DOWN:
-                prefresh(_pad, start++, 0, y+1, x+1, height, width);
+                prefresh(my_pad, start++, 0, y+1, x+1, height, width);
                 break;
             case KEY_UP:
-                prefresh(_pad, start--, 0, y+1, x+1, height, width);
+                prefresh(my_pad, start--, 0, y+1, x+1, height, width);
                 break;
         }
     }
 
     delwin(my_pad);
     delwin(my_sub_win);
-    clear();
+    wclear(my_win);
     disp_menu();       
     get_choice();
 
@@ -168,21 +174,22 @@ void n_disp_menu(int* sta, int* qua, int* div)
 {
     int     i;
 
-    printw("===============================================================================\n");
-    printw("                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)\n");
-    printw("\n");
-    printw("Please choose an option:\n");
+    mvwprintw(my_win, 1, 2,"===============================================================================\n");
+    mvwprintw(my_win, 2, 2,"                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)\n");
+    mvwprintw(my_win, 3, 2,"\n");
+    mvwprintw(my_win, 4, 2,"Please choose an option:\n");
 
     /*
      * Display the menu.
      */
 
     for (i = 0; i < Nelts(menu_opts); i++)
-        printw("    %2d). %s\n", i+1, menu_opts[i].string);
+        mvwprintw(my_win, (i+5), 2, "    %2d). %s\n", i+1, menu_opts[i].string);
 
-    printw("                                   sta = %d qua = %d div = %d\n", *sta, *qua, *div);
-    printw("===============================================================================\n");
-    refresh();
+    mvwprintw(my_win, (Nelts(menu_opts)+5), 2,"                                   sta = %d qua = %d div = %d\n", *sta, *qua, *div);
+    mvwprintw(my_win, (Nelts(menu_opts)+6), 2,"===============================================================================\n");
+    box(my_win, 0, 0);
+    wrefresh(my_win);
 }
 
 /*--------------------------------------------------------------------------*
@@ -203,13 +210,13 @@ void get_choice()
 
     for (;;)
     {
-        scanw("%d", &choice);
+        mvwscanw(my_win,(Nelts(menu_opts)+8), 2, "%d", &choice);
         if (choice > 0 && choice <= Nelts(menu_opts))
             break;
-        printw("Invalid Selection.\n");
+        wrefresh(my_win);
     }
 
-    clear();
+    wclear(my_win);
     disp_menu();
 
     /*
@@ -226,10 +233,10 @@ void get_choice()
 
 void n_get_int(int* number, char string[])
 {
-    printw("%s", string);
-    scanw("%d", &(*number));
-    refresh();
-    clear();
+    mvwprintw(my_win, (Nelts(menu_opts)+7), 2, "%s", string);
+    wscanw(my_win,"%d", &(*number));
+    wrefresh(my_win);
+    wclear(my_win);
 }
 
 /*--------------------------------------------------------------------------*
@@ -251,8 +258,6 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
                                                         harm_series[i].value);
     }
 
-    scroll_pad(my_pad);
-
 }
 
 /*
@@ -263,7 +268,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 {
     int     i;
 
-    for (i = 1; i < (((*quantity)-1) * (*divs) + 1); i++)
+    for (i = 1; i < (((*quantity)-1) * (*divs)); i++)
     {
         mvwprintw(my_pad, i, 1, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
                                                         divisions[i].harmonic,
@@ -273,7 +278,14 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
                                                         divisions[i].value); 
     }
 
-    scroll_pad(my_pad);
+    /*
+     * Refresh pad.
+     *
+     * int prefresh(WINDOW *pad, int pminrow, int pmincol, int sminrow,
+     *                                  int smincol, int smaxrow, int smaxcol);
+     */
+
+    prefresh(my_pad, 0, 0, y+1, x+1, height, width);
 
 }
 

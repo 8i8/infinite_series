@@ -5,6 +5,8 @@
 #include <ncurses.h>
 #include "I01-inf_series.h"
 
+#define WIDE   80               /* With of calc output for the pad */
+
 static int  sta = 0;
 static int  qua = 0;
 static int  div = 0;
@@ -15,11 +17,9 @@ static int  div = 0;
 
 void show_var(int *p_start, int *p_quantity, int *p_divisions)
 {
-
     sta = *p_start + 1;
     qua = *p_quantity - 1;
     div = *p_divisions;
-    refresh();
 }
 
 /*
@@ -37,9 +37,7 @@ void disp_menu()
 
 void print_harmonics(harmonic* harm_series, int* quantity)
 {
-    int     divs = 0;
-
-    make_window(harmonics, quantity, divs);
+    make_window(quantity, WIDE);
     n_print_harmonics(harm_series, quantity);
 }
 
@@ -49,7 +47,8 @@ void print_harmonics(harmonic* harm_series, int* quantity)
 
 void print_data(calc* divisions, int* quantity, int* divs)
 {
-    make_window(divisions, quantity, divs);
+    make_window(qua * div, WIDE);
     n_print_calc(divisions, quantity, divs);
+    scroll_pad();
 }
 

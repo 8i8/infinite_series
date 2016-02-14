@@ -21,8 +21,8 @@ void get_param()
     get_parameters(&start, &quantity, &divisions);
     off_set_param(&start, &quantity);
     show_var(&start, &quantity, &divisions);
-
     generate_data();
+
     echo_out();
 }
 
@@ -51,7 +51,6 @@ void generate_data()
     data_1 = gen_data_1(&start, &quantity);
     /* Generate the subdivisions of each harmonic. */
     data_2 = gen_data_2(data_1, &quantity, & divisions);
-    print_data(data_2, &quantity, &divisions);
 }
 
 /*
