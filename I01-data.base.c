@@ -78,6 +78,9 @@ void echo_out()
     {
         /* Print to screen. */
         print_data(data_2, &quantity, &divisions);
+        disp_menu();
+        my_pad_refresh();
+        scroll_pad();
     }
 }
 

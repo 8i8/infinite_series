@@ -94,8 +94,7 @@ void make_window(int* length)
     my_sub_win = new_sub_window(my_pad, height, width, y, x);
 
     mvprintw(LINES - 3, 2, "Use the Up/Down arrows to scroll.");
-    mvprintw(LINES - 2, 2, "F1 to Exit");
-    wrefresh(my_sub_win);
+    mvprintw(LINES - 2, 2, "F1 Return to menu");
 }
 
 void menu_window()
@@ -283,13 +282,9 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 
     /*
      * Refresh pad.
-     *
-     * int prefresh(WINDOW *pad, int pminrow, int pmincol, int sminrow,
-     *                                  int smincol, int smaxrow, int smaxcol);
      */
 
-    prefresh(my_pad, 0, 0, y+1, x+1, height, width);
-    scroll_pad();
+    prefresh(my_pad, 0, 0, y, x, height, width);
 
 }
 
