@@ -93,8 +93,8 @@ void make_window(int* length)
     my_pad = newpad(*length, PAD_WIDTH);
     my_sub_win = new_sub_window(my_pad, height, width, y, x);
 
-    mvprintw(LINES - 3, 2, "Use the Up/Down arrows to scroll.");
-    mvprintw(LINES - 2, 2, "F1 Return to menu");
+    mvprintw(LINES - 3, 1, "Use the Up/Down arrows to scroll.");
+    mvprintw(LINES - 2, 1, "F1 Return to menu");
 }
 
 void menu_window()
@@ -173,23 +173,20 @@ void n_disp_menu(int* sta, int* qua, int* div)
 {
     int     i;
 
-    mvwprintw(my_win, 1, 2,
-    "===============================================================================");
-    mvwprintw(my_win, 2, 2,"                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
-    mvwprintw(my_win, 3, 2,"");
-    mvwprintw(my_win, 4, 2,"Please choose an option:");
+    //mvwprintw(my_win, 1, 1,"============================================================================");
+    mvwprintw(my_win, 1, 1,"                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
+    mvwprintw(my_win, 2, 1,"");
+    mvwprintw(my_win, 3, 1,"Please choose an option:");
 
     /*
      * Display the menu.
      */
 
     for (i = 0; i < Nelts(menu_opts); i++)
-        mvwprintw(my_win, (i+5), 2, "    %2d). %s", i+1, menu_opts[i].string);
+        mvwprintw(my_win, (i+4), 1, "    %2d). %s", i+1, menu_opts[i].string);
 
-    wprintw(my_win,
-    "                                       sta = %d qua = %d div = %d", *sta, *qua, *div);
-    mvwprintw(my_win, (Nelts(menu_opts)+5), 2,
-    "===============================================================================");
+    wprintw(my_win,"                                       sta = %d qua = %d div = %d", *sta, *qua, *div);
+    //mvwprintw(my_win, (Nelts(menu_opts)+5), 1,"============================================================================");
     box(my_win, 0, 0);
     wrefresh(my_win);
 }
@@ -212,7 +209,7 @@ void get_choice()
 
     for (;;)
     {
-        mvwscanw(my_win,(Nelts(menu_opts)+6), 2, "%d", &choice);
+        mvwscanw(my_win,(Nelts(menu_opts)+5), 1, "%d", &choice);
         if (choice > 0 && choice <= Nelts(menu_opts))
             break;
         wrefresh(my_win);
@@ -235,7 +232,7 @@ void get_choice()
 
 void n_get_int(int* number, char string[])
 {
-    mvwprintw(my_win, (Nelts(menu_opts)+6), 2, "%s", string);
+    mvwprintw(my_win, (Nelts(menu_opts)+5), 1, "%s", string);
     wscanw(my_win,"%d", &(*number));
     wrefresh(my_win);
     wclear(my_win);

@@ -67,21 +67,21 @@ void quit_prg();
 
 /* data.calc */
 
-void off_set_param(int* start, int* quantity);
-harmonic* gen_harmonics(harmonic* harm_series, int start, int quantity);
-calc* gen_subs(harmonic *harmonics, calc *divisions, int quantity, int divs);
+void off_set_param(int*, int*);
+harmonic* gen_harmonics(harmonic*, int, int);
+calc* gen_subs(harmonic*, calc*, int, int);
 
 /* data.memory */
 
-harmonic* new_data_struct_1(int quant);
-calc* new_data_struct_2(int quant, int divisions);
-harmonic* gen_data_1(int* start, int* quantity);
-calc* gen_data_2(harmonic* data_1, int* quantity, int* divisions);
-void free_memory(void *data);
+harmonic* new_data_struct_1(int);
+calc* new_data_struct_2(int, int);
+harmonic* gen_data_1(int*, int*);
+calc* gen_data_2(harmonic*, int*, int*);
+void free_memory(void*);
 
 /* input */
 
-void get_parameters(int *start, int *quantity, int *divisions);
+void get_parameters(int*, int*, int*);
 void get_divisions();
 
 /* IO.ncurses */
@@ -89,24 +89,24 @@ void get_divisions();
 void init_scr();
 void mem_error();
 void close_curses();
-WINDOW* new_window(int height, int width, int y, int x);
-WINDOW* new_sub_window(WINDOW *orig, int height, int width, int y, int x);
-WINDOW* new_pad(int nlines, int ncols);
-void make_window(int* length);
+WINDOW* new_window(int, int, int, int);
+WINDOW* new_sub_window(WINDOW*, int, int, int, int);
+WINDOW* new_pad(int, int);
+void make_window(int*);
 void menu_window();
 void my_win_refresh();
 void my_pad_refresh();
 void scroll_pad();
-void n_disp_menu(int* sta, int* qua, int* div);
+void n_disp_menu(int*, int*, int*);
 void get_choice();
-void n_get_int(int* number, char* string);
-void n_print_harmonics(harmonic* harm_series, int* quantity);
-void n_print_calc(calc* divisions, int* quantity, int* divs);
+void n_get_int(int*, char*);
+void n_print_harmonics(harmonic*, int*);
+void n_print_calc(calc*, int*, int*);
 
 /* output */
 
-void show_var(int *start, int *quantity, int *divisions);
+void show_var(int*, int*, int*);
 void disp_menu();
-void print_harmonics(harmonic* harm_series, int* quantity);
-void print_data(calc* divisions, int* quantity, int* divs);
+void print_harmonics(harmonic*, int*);
+void print_data(calc*, int*, int*);
 
