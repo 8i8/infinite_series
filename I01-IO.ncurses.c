@@ -5,14 +5,13 @@
 #include <ncurses.h>
 #include "I01-inf_series.h"
 
-#define PAD_WIDTH       60
+#define PAD_WIDTH       80
 #define Nelts(a)        (sizeof(a)/sizeof(a[0]))
 #define MENU_Y          12
 #define MENU_X          80
 
 static WINDOW*  my_win;
 static WINDOW*  my_pad;
-static WINDOW*  my_sub_win;
 
 static int      width,
                 height,
@@ -89,11 +88,10 @@ void make_window(int* length)
 {
     getmaxyx(stdscr, max_y, max_x);
 
-    height = max_y - 12;
+    height = max_y - 4;
     width  = max_x - (2 * x);
 
     my_pad = newpad(*length, PAD_WIDTH);
-    my_sub_win = new_sub_window(my_pad, height, width, 12, 0);
 
     mvprintw(LINES - 3, 1, "Use the Up/Down arrows to scroll.");
     mvprintw(LINES - 2, 1, "F1 Return to menu");
@@ -123,7 +121,6 @@ void scroll_pad()
     int     c,
             start = 1;
 
-    touchwin(my_sub_win);
     prefresh(my_pad, start, 0, y+2, x, height, width);
 
     while((c = getch()) != KEY_F(1))
@@ -139,8 +136,9 @@ void scroll_pad()
     }
 
     delwin(my_pad);
-    delwin(my_sub_win);
     wclear(my_win);
+    disp_menu();
+    get_choice();
 
 }
 
@@ -176,7 +174,7 @@ void n_disp_menu(int* sta, int* qua, int* div)
 {
     int     i;
 
-    mvwprintw(my_win, 1, 0,"                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
+    mvwprintw(my_win, 1, 20,"x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
     mvwprintw(my_win, 2, 0,"");
     mvwprintw(my_win, 3, 0,"Please choose an option:");
 
@@ -185,9 +183,11 @@ void n_disp_menu(int* sta, int* qua, int* div)
      */
 
     for (i = 0; i < Nelts(menu_opts); i++)
-        mvwprintw(my_win, (i+4), 0, "    %2d). %s", i+1, menu_opts[i].string);
+        mvwprintw(my_win, (i+4), 4, "%2d). %s", i+1, menu_opts[i].string);
 
-    wprintw(my_win,"                                       sta = %d qua = %d div = %d", *sta, *qua, *div);
+    mvwprintw(my_win, (i+1), 65," sta = %4d", *sta);
+    mvwprintw(my_win, (i+2), 65," qua = %4d", *qua);
+    mvwprintw(my_win, (i+3), 65," div = %4d", *div);
     wrefresh(my_win);
 }
 
