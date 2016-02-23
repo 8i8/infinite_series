@@ -7,6 +7,8 @@
 
 #define PAD_WIDTH       60
 #define Nelts(a)        (sizeof(a)/sizeof(a[0]))
+#define MENU_Y          12
+#define MENU_X          80
 
 static WINDOW*  my_win;
 static WINDOW*  my_pad;
@@ -87,11 +89,11 @@ void make_window(int* length)
 {
     getmaxyx(stdscr, max_y, max_x);
 
-    height = max_y - 4;
+    height = max_y - 12;
     width  = max_x - (2 * x);
 
     my_pad = newpad(*length, PAD_WIDTH);
-    my_sub_win = new_sub_window(my_pad, height, width, y, x);
+    my_sub_win = new_sub_window(my_pad, height, width, 12, 0);
 
     mvprintw(LINES - 3, 1, "Use the Up/Down arrows to scroll.");
     mvprintw(LINES - 2, 1, "F1 Return to menu");
@@ -99,8 +101,7 @@ void make_window(int* length)
 
 void menu_window()
 {
-    getmaxyx(stdscr, max_y, max_x);
-    my_win = new_window( max_y, max_x, 0, 0);
+    my_win = new_window( MENU_Y, MENU_X, 0, 0);
 }
 
 void my_win_refresh()
@@ -110,7 +111,7 @@ void my_win_refresh()
 
 void my_pad_refresh()
 {
-    prefresh(my_pad, 0, 0, y+1, x+1, height, width);
+    prefresh(my_pad, 0, 0, y+2, x+1, height, width);
 }
 
 /*
@@ -120,15 +121,19 @@ void my_pad_refresh()
 void scroll_pad()
 {
     int     c,
-            start = 0;
+            start = 1;
+
+    touchwin(my_sub_win);
+    prefresh(my_pad, start, 0, y+2, x, height, width);
 
     while((c = getch()) != KEY_F(1))
-    {   switch(c)
+    {   
+        switch(c)
         {   case KEY_DOWN:
-                prefresh(my_pad, start++, 0, y+1, x+1, height, width);
+                prefresh(my_pad, start++, 0, y+2, x, height, width);
                 break;
             case KEY_UP:
-                prefresh(my_pad, start--, 0, y+1, x+1, height, width);
+                prefresh(my_pad, start--, 0, y+2, x, height, width);
                 break;
         }
     }
@@ -136,8 +141,6 @@ void scroll_pad()
     delwin(my_pad);
     delwin(my_sub_win);
     wclear(my_win);
-    disp_menu();       
-    get_choice();
 
 }
 
@@ -173,21 +176,18 @@ void n_disp_menu(int* sta, int* qua, int* div)
 {
     int     i;
 
-    //mvwprintw(my_win, 1, 1,"============================================================================");
-    mvwprintw(my_win, 1, 1,"                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
-    mvwprintw(my_win, 2, 1,"");
-    mvwprintw(my_win, 3, 1,"Please choose an option:");
+    mvwprintw(my_win, 1, 0,"                    x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
+    mvwprintw(my_win, 2, 0,"");
+    mvwprintw(my_win, 3, 0,"Please choose an option:");
 
     /*
      * Display the menu.
      */
 
     for (i = 0; i < Nelts(menu_opts); i++)
-        mvwprintw(my_win, (i+4), 1, "    %2d). %s", i+1, menu_opts[i].string);
+        mvwprintw(my_win, (i+4), 0, "    %2d). %s", i+1, menu_opts[i].string);
 
     wprintw(my_win,"                                       sta = %d qua = %d div = %d", *sta, *qua, *div);
-    //mvwprintw(my_win, (Nelts(menu_opts)+5), 1,"============================================================================");
-    box(my_win, 0, 0);
     wrefresh(my_win);
 }
 
@@ -209,19 +209,13 @@ void get_choice()
 
     for (;;)
     {
-        mvwscanw(my_win,(Nelts(menu_opts)+5), 1, "%d", &choice);
+        mvwscanw(my_win,(Nelts(menu_opts)+5), 0, "%d", &choice);
         if (choice > 0 && choice <= Nelts(menu_opts))
             break;
         wrefresh(my_win);
     }
 
-    wclear(my_win);
-    disp_menu();
-
-    /*
-     * Call the function via the function pointer.
-     */
-
+    wrefresh(my_win);
     menu_opts[choice-1].func();
 
 }
@@ -232,7 +226,7 @@ void get_choice()
 
 void n_get_int(int* number, char string[])
 {
-    mvwprintw(my_win, (Nelts(menu_opts)+5), 1, "%s", string);
+    mvwprintw(my_win, (Nelts(menu_opts)+5), 0, "%s", string);
     wscanw(my_win,"%d", &(*number));
     wrefresh(my_win);
     wclear(my_win);
@@ -252,7 +246,7 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 
     for (i = 1; i <= (*quantity); i++)
     {
-        mvwprintw(my_pad, i, 1, "From the print function %2d >>> %.16f\n",
+        mvwprintw(my_pad, i, 0, "From the print function %2d >>> %.16f\n",
                                                         harm_series[i].id,
                                                         harm_series[i].value);
     }
@@ -269,7 +263,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 
     for (i = 1; i < (*quantity) * (*divs); i++)
     {
-        mvwprintw(my_pad, i, 1, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
+        mvwprintw(my_pad, i, 0, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
                                                         divisions[i].harmonic,
                                                         divisions[i].harmonic,
                                                         divisions[i].fraction,
@@ -277,11 +271,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
                                                         divisions[i].value); 
     }
 
-    /*
-     * Refresh pad.
-     */
-
-    prefresh(my_pad, 0, 0, y, x, height, width);
+    prefresh(my_pad, 0, 0, y+2, x, height, width);
 
 }
 

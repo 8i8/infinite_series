@@ -24,12 +24,14 @@ static    int         start       = 0,
 
 void get_param()
 {
-    get_parameters(&start, &quantity, &divisions);
+    get_start(&start);
+    get_quantity(&quantity);
+    get_divisions(&divisions);
     off_set_param(&start, &quantity);
     show_var(&start, &quantity, &divisions);
     generate_data();
-
     echo_out();
+    get_choice();
 }
 
 /*
@@ -43,6 +45,7 @@ void change_div()
 
     generate_data();
     echo_out();
+    get_choice();
 }
 
 /*
@@ -79,7 +82,6 @@ void echo_out()
         /* Print to screen. */
         print_data(data_2, &quantity, &divisions);
         disp_menu();
-        my_pad_refresh();
         scroll_pad();
     }
 }

@@ -81,8 +81,9 @@ void free_memory(void*);
 
 /* input */
 
-void get_parameters(int*, int*, int*);
-void get_divisions();
+void get_start(int*);
+void get_quantity(int*);
+void get_divisions(int*);
 
 /* IO.ncurses */
 
