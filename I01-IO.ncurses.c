@@ -246,7 +246,7 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 
     for (i = 1; i <= (*quantity); i++)
     {
-        mvwprintw(my_pad, i, 0, "From the print function %2d >>> %.16f\n",
+        mvwprintw(my_pad, i, 10, "From the print function %2d >>> %.16f\n",
                                                         harm_series[i].id,
                                                         harm_series[i].value);
     }
@@ -263,7 +263,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 
     for (i = 1; i < (*quantity) * (*divs); i++)
     {
-        mvwprintw(my_pad, i, 0, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
+        mvwprintw(my_pad, i, 10, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
                                                         divisions[i].harmonic,
                                                         divisions[i].harmonic,
                                                         divisions[i].fraction,
