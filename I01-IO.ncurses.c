@@ -5,23 +5,21 @@
 #include <ncurses.h>
 #include "I01-inf_series.h"
 
-#define PAD_WIDTH       80
-#define Nelts(a)        (sizeof(a)/sizeof(a[0]))
-#define MENU_Y          12
-#define MENU_X          80
+#define PAD_WIDTH       80                          /* Pad width             */
+#define Nelts(a)        (sizeof(a)/sizeof(a[0]))    /* Number of menu option */
+#define MENU_Y          12                          /* Menu window height    */
+#define MENU_X          80                          /* Menue window width    */
 
 static WINDOW*  my_win;
 static WINDOW*  my_pad;
 
-static int      width,
-                height,
-                max_y,
+static int      max_y,
                 max_x,
-                y = 10,
+                y = 8,
                 x = 4;
 
 /*--------------------------------------------------------------------------*
- * Program functionality
+ * Program base functionality
  *--------------------------------------------------------------------------*/
 
 /*
@@ -33,7 +31,9 @@ void init_scr()
     initscr();
     cbreak();
     keypad(stdscr, TRUE);
-    menu_window();
+    getmaxyx(stdscr, max_y, max_x);
+    max_y = max_y - 4;
+    max_x = max_x -(2 * x);
 }
 
 /*
@@ -56,93 +56,6 @@ void close_curses()
 }
 
 /*--------------------------------------------------------------------------*
- * Windows and pads.
- *--------------------------------------------------------------------------*/
-
-WINDOW* new_window(int height, int width, int y, int x)
-{
-    WINDOW* local_win;
-
-    local_win = newwin(height, width, y, x);
-    wrefresh(local_win);
-    return local_win;
-}
-
-WINDOW* new_sub_window(WINDOW *orig, int height, int width, int y, int x)
-{
-    WINDOW* local_win;
-
-    local_win = subwin(orig, height, width, y, x);
-    wrefresh(local_win);
-    return local_win;
-}
-
-WINDOW* new_pad(int nlines, int ncols)
-{
-    WINDOW* local_pad;
-    local_pad = newpad(nlines, ncols);
-    return local_pad;
-}
-
-void make_window(int* length)
-{
-    getmaxyx(stdscr, max_y, max_x);
-
-    height = max_y - 4;
-    width  = max_x - (2 * x);
-
-    my_pad = newpad(*length, PAD_WIDTH);
-
-    mvprintw(LINES - 3, 1, "Use the Up/Down arrows to scroll.");
-    mvprintw(LINES - 2, 1, "F1 Return to menu");
-}
-
-void menu_window()
-{
-    my_win = new_window( MENU_Y, MENU_X, 0, 0);
-}
-
-void my_win_refresh()
-{
-    wrefresh(my_win);
-}
-
-void my_pad_refresh()
-{
-    prefresh(my_pad, 0, 0, y+2, x+1, height, width);
-}
-
-/*
- * Scroll pad display.
- */
-
-void scroll_pad()
-{
-    int     c,
-            start = 1;
-
-    prefresh(my_pad, start, 0, y+2, x, height, width);
-
-    while((c = getch()) != KEY_F(1))
-    {   
-        switch(c)
-        {   case KEY_DOWN:
-                prefresh(my_pad, start++, 0, y+2, x, height, width);
-                break;
-            case KEY_UP:
-                prefresh(my_pad, start--, 0, y+2, x, height, width);
-                break;
-        }
-    }
-
-    delwin(my_pad);
-    wclear(my_win);
-    disp_menu();
-    get_choice();
-
-}
-
-/*--------------------------------------------------------------------------*
  * Menu
  *--------------------------------------------------------------------------*/
 
@@ -158,15 +71,15 @@ static struct
 }
     menu_opts[] = 
 {
-    {"Set paramiters start and length of calc.",   get_param        },
-    {"Set number of divisions.",                   change_div       },
-    {"Print harmonic series.",                     echo_harmonics   },
-    {"Print series with divisions.",               echo_out         },
-    {"Exit.",                                      quit_prg         }
+    { "Set paramiters start and length of calc.",   get_param        },
+    { "Set number of divisions.",                   change_div       },
+    { "Print harmonic series.",                     echo_harmonics   },
+    { "Print series with divisions.",               echo_out         },
+    { "Exit.",                                      quit_prg         }
 };
 
 /*
- * Display the full menu screen ONCE, then prompt for a choice and call the
+ * Display the full menu screen, then prompt for a choice and call the
  * appropriate function.
  */
 
@@ -179,11 +92,15 @@ void n_disp_menu(int* sta, int* qua, int* div)
     mvwprintw(my_win, 3, 0,"Please choose an option:");
 
     /*
-     * Display the menu.
+     * Display the function menu.
      */
 
     for (i = 0; i < Nelts(menu_opts); i++)
         mvwprintw(my_win, (i+4), 4, "%2d). %s", i+1, menu_opts[i].string);
+
+    /*
+     * Display user entered variables.
+     */
 
     mvwprintw(my_win, (i+1), 65," sta = %4d", *sta);
     mvwprintw(my_win, (i+2), 65," qua = %4d", *qua);
@@ -209,7 +126,7 @@ void get_choice()
 
     for (;;)
     {
-        mvwscanw(my_win,(Nelts(menu_opts)+5), 0, "%d", &choice);
+        mvwscanw(my_win,(Nelts(menu_opts)+4), 0, "%d", &choice);
         if (choice > 0 && choice <= Nelts(menu_opts))
             break;
         wrefresh(my_win);
@@ -226,7 +143,7 @@ void get_choice()
 
 void n_get_int(int* number, char string[])
 {
-    mvwprintw(my_win, (Nelts(menu_opts)+5), 0, "%s", string);
+    mvwprintw(my_win, (Nelts(menu_opts)+4), 0, "%s", string);
     wscanw(my_win,"%d", &(*number));
     wrefresh(my_win);
     wclear(my_win);
@@ -271,7 +188,70 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
                                                         divisions[i].value); 
     }
 
-    prefresh(my_pad, 0, 0, y+2, x, height, width);
+    prefresh(my_pad, 0, 0, y+2, x, max_y, max_x);
+
+}
+
+/*--------------------------------------------------------------------------*
+ * Windows and pads.
+ *--------------------------------------------------------------------------*/
+
+WINDOW* new_window(int height, int width, int y, int x)
+{
+    WINDOW* local_win;
+
+    local_win = newwin(height, width, y, x);
+    wrefresh(local_win);
+    return local_win;
+}
+
+WINDOW* new_pad(int nlines, int ncols)
+{
+    WINDOW* local_pad;
+    local_pad = newpad(nlines, ncols);
+    return local_pad;
+}
+
+void make_pad(int* length)
+{
+    my_pad = newpad(*length, PAD_WIDTH);
+
+    mvprintw(LINES - 3, 1, "Use the Up/Down arrows to scroll.");
+    mvprintw(LINES - 2, 1, "F1 Return to menu");
+}
+
+void menu_window()
+{
+    my_win = new_window( MENU_Y, MENU_X, 0, 0);
+}
+
+/*
+ * Scroll pad display.
+ */
+
+void scroll_pad()
+{
+    int     c,
+            start = 1;
+
+    prefresh(my_pad, start, 0, y+2, x, max_y, max_x);
+
+    while((c = getch()) != KEY_F(1))
+    {   
+        switch(c)
+        {   case KEY_DOWN:
+                prefresh(my_pad, start++, 0, y+2, x, max_y, max_x);
+                break;
+            case KEY_UP:
+                prefresh(my_pad, start--, 0, y+2, x, max_y, max_x);
+                break;
+        }
+    }
+
+    delwin(my_pad);
+    wclear(my_win);
+    disp_menu();
+    get_choice();
 
 }
 

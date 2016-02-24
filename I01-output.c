@@ -37,7 +37,7 @@ void disp_menu()
 
 void print_harmonics(harmonic* harm_series, int* quantity)
 {
-    make_window(quantity);
+    make_pad(quantity);
     n_print_harmonics(harm_series, quantity);
 }
 
@@ -49,7 +49,7 @@ void print_data(calc* divisions, int* quantity, int* divs)
 {
     int     length = ((*quantity) * (*divs));
 
-    make_window(&length);
+    make_pad(&length);
     n_print_calc(divisions, quantity, divs);
 }
 

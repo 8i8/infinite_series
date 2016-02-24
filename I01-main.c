@@ -18,6 +18,7 @@ int main (int argc, char *argv[])
      */
 
     init_scr();
+    menu_window();
     disp_menu();
     get_choice();
     quit_prg();
