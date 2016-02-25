@@ -47,7 +47,7 @@ void print_harmonics(harmonic* harm_series, int* quantity)
 
 void print_data(calc* divisions, int* quantity, int* divs)
 {
-    int     length = ((*quantity) * (*divs));
+    int     length = ((*quantity) * (*divs))+1;
 
     make_pad(&length);
     n_print_calc(divisions, quantity, divs);

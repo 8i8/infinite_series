@@ -15,7 +15,7 @@ static WINDOW*  my_pad;
 
 static int      max_y,
                 max_x,
-                y = 8,
+                y = 10,
                 x = 4;
 
 /*--------------------------------------------------------------------------*
@@ -178,6 +178,8 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 {
     int     i;
 
+    wclear(my_pad);
+
     for (i = 1; i < (*quantity) * (*divs); i++)
     {
         mvwprintw(my_pad, i, 10, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
@@ -188,7 +190,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
                                                         divisions[i].value); 
     }
 
-    prefresh(my_pad, 0, 0, y+2, x, max_y, max_x);
+    prefresh(my_pad, 0, 0, y, x, max_y, max_x);
 
 }
 
@@ -234,16 +236,16 @@ void scroll_pad()
     int     c,
             start = 1;
 
-    prefresh(my_pad, start, 0, y+2, x, max_y, max_x);
+    prefresh(my_pad, start, 0, y, x, max_y, max_x);
 
     while((c = getch()) != KEY_F(1))
     {   
         switch(c)
         {   case KEY_DOWN:
-                prefresh(my_pad, start++, 0, y+2, x, max_y, max_x);
+                prefresh(my_pad, start++, 0, y, x, max_y, max_x);
                 break;
             case KEY_UP:
-                prefresh(my_pad, start--, 0, y+2, x, max_y, max_x);
+                prefresh(my_pad, start--, 0, y, x, max_y, max_x);
                 break;
         }
     }
