@@ -89,6 +89,8 @@ void get_divisions(int*);
 
 void init_scr();
 void mem_error();
+void clear_pad();
+void clear_win();
 void close_curses();
 WINDOW* new_window(int, int, int, int);
 WINDOW* new_sub_window(WINDOW*, int, int, int, int);
@@ -108,4 +110,5 @@ void show_var(int*, int*, int*);
 void disp_menu();
 void print_harmonics(harmonic*, int*);
 void print_data(calc*, int*, int*);
+void arrow_sig();
 

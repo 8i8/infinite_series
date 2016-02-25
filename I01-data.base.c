@@ -72,6 +72,7 @@ void echo_harmonics()
     {
         /* Print to screen. */
         print_harmonics(data_1, &quantity);
+        disp_menu();
     }
 }
 

@@ -37,6 +37,22 @@ void init_scr()
 }
 
 /*
+ * Clear pad
+ */
+
+void clear_pad()
+{
+    prefresh(my_pad, 0, 0, y, x, max_y, max_x);
+    refresh();
+}
+
+void clear_win()
+{
+    werase(my_win);
+    refresh();
+}
+
+/*
  * Display memory allocation failure.
  */
 
@@ -87,6 +103,8 @@ void n_disp_menu(int* sta, int* qua, int* div)
 {
     int     i;
 
+    clear_win();
+    curs_set(1);
     mvwprintw(my_win, 1, 20,"x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
     mvwprintw(my_win, 2, 0,"");
     mvwprintw(my_win, 3, 0,"Please choose an option:");
@@ -160,13 +178,20 @@ void n_get_int(int* number, char string[])
 void n_print_harmonics(harmonic* harm_series, int* quantity)
 {
     int     i;
+    
+    clear_pad();
+    prefresh(my_pad, 0, 0, y, x, max_y, max_x);
+    refresh();
 
     for (i = 1; i <= (*quantity); i++)
     {
-        mvwprintw(my_pad, i, 10, "From the print function %2d >>> %.16f\n",
+        mvwprintw(my_pad, i, 0, "From the print function %2d >>> %.16f\n",
+
                                                         harm_series[i].id,
                                                         harm_series[i].value);
     }
+
+    prefresh(my_pad, 0, 0, y, x, max_y, max_x);
 
 }
 
@@ -178,12 +203,13 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 {
     int     i;
 
-    wclear(my_pad);
+    clear_pad();
 
     for (i = 1; i < (*quantity) * (*divs); i++)
     {
-        mvwprintw(my_pad, i, 10, "%-4d z=z+1/%-4d %4d of %d -> %.15f\n",
-                                                        divisions[i].harmonic,
+        mvwprintw(my_pad, i, 0, "%-4d z=z+1/%-4d %4d/%d -> %.15f\n",
+
+                                                        divisions[i].id,
                                                         divisions[i].harmonic,
                                                         divisions[i].fraction,
                                                         *divs,
@@ -192,6 +218,23 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 
     prefresh(my_pad, 0, 0, y, x, max_y, max_x);
 
+}
+
+void arrow_sig()
+{
+    /*
+    mvprintw(LINES - 3, 1, "Use the Up/Down arrows to scroll.");
+    mvprintw(LINES - 2, 1, "F1 Return to menu");
+    */
+}
+
+/*
+ * Erase text 
+ * int wredrawln(WINDOW *win, int beg_line, int num_lines);
+ */
+
+void errase_arrow_sig()
+{
 }
 
 /*--------------------------------------------------------------------------*
@@ -216,14 +259,19 @@ WINDOW* new_pad(int nlines, int ncols)
 
 void make_pad(int* length)
 {
+    if (my_pad != NULL)
+        delwin(my_pad);
+
     my_pad = newpad(*length, PAD_WIDTH);
 
-    mvprintw(LINES - 3, 1, "Use the Up/Down arrows to scroll.");
-    mvprintw(LINES - 2, 1, "F1 Return to menu");
+    arrow_sig();
 }
 
 void menu_window()
 {
+    if (my_win != NULL)
+        delwin(my_win);
+
     my_win = new_window( MENU_Y, MENU_X, 0, 0);
 }
 
@@ -236,6 +284,7 @@ void scroll_pad()
     int     c,
             start = 1;
 
+    curs_set(0);
     prefresh(my_pad, start, 0, y, x, max_y, max_x);
 
     while((c = getch()) != KEY_F(1))
@@ -250,8 +299,8 @@ void scroll_pad()
         }
     }
 
+    clear_pad();
     delwin(my_pad);
-    wclear(my_win);
     disp_menu();
     get_choice();
 
