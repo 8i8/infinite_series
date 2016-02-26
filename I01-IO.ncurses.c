@@ -13,7 +13,9 @@
 static WINDOW*  my_win;
 static WINDOW*  my_pad;
 
-static int      port_y,
+static int      max_y,
+                max_x,
+                port_y,
                 port_x,
                 y = 10,                             /* Margin top of pad     */
                 x = 5;                              /* Margin left of pad    */
@@ -44,7 +46,7 @@ void get_screen_details()
             max_x;
 
     getmaxyx(stdscr, max_y, max_x);
-    port_y = max_y - MENU_Y;
+    port_y = max_y - 1;
     port_x = max_x;
 }
 
@@ -204,7 +206,8 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
                                                         harm_series[i].value);
     }
 
-    prefresh(my_pad, 0, 0, y, x, port_y, port_x);
+    //prefresh(my_pad, 0, 0, y, x, port_y, port_x);
+    prefresh(my_pad, 0, 0, y, x, max_y, PAD_WIDTH);
     refresh();
 
 }
@@ -230,7 +233,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
                                                         divisions[i].value); 
     }
 
-    prefresh(my_pad, 0, 0, y, x, port_y, port_x);
+    prefresh(my_pad, 0, 0, y, x, max_y, PAD_WIDTH);
 
 }
 
@@ -281,16 +284,16 @@ void scroll_pad()
             start = 1;
 
     curs_set(0);
-    prefresh(my_pad, start, 0, y, x, port_y, port_x);
+    prefresh(my_pad, start, 0, y, x, port_y, PAD_WIDTH);
 
     while((c = getch()) != KEY_F(1))
     {   
         switch(c)
         {   case KEY_DOWN:
-                prefresh(my_pad, start++, 0, y, x, port_y, port_x);
+                prefresh(my_pad, start++, 0, y, x, port_y, PAD_WIDTH);
                 break;
             case KEY_UP:
-                prefresh(my_pad, start--, 0, y, x, port_y, port_x);
+                prefresh(my_pad, start--, 0, y, x, port_y, PAD_WIDTH);
                 break;
         }
     }
