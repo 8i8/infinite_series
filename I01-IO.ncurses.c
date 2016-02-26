@@ -42,9 +42,6 @@ void init_scr()
 
 void get_screen_details()
 {
-    int     max_y,
-            max_x;
-
     getmaxyx(stdscr, max_y, max_x);
     port_y = max_y - 1;
     port_x = max_x;
@@ -200,13 +197,12 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 
     for (i = 1; i <= (*quantity); i++)
     {
-        mvwprintw(my_pad, i, 0, "From the print function %2d >>> %.16f\n",
+        mvwprintw(my_pad, i-1, 0, "From the print function %2d >>> %.16f\n",
 
                                                         harm_series[i].id,
                                                         harm_series[i].value);
     }
 
-    //prefresh(my_pad, 0, 0, y, x, port_y, port_x);
     prefresh(my_pad, 0, 0, y, x, max_y, PAD_WIDTH);
     refresh();
 
@@ -222,9 +218,9 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 
     clear_pad();
 
-    for (i = 1; i < (*quantity) * (*divs); i++)
+    for (i = 1; i <= (*quantity) * (*divs); i++)
     {
-        mvwprintw(my_pad, i, 0, "%-4d z=z+1/%-4d/%4d/%d -> %.15f\n",
+        mvwprintw(my_pad, i-1, 0, "%-4d z=z+1/%-4d/%4d/%d -> %.15f\n",
 
                                                         divisions[i].id,
                                                         divisions[i].harmonic,
@@ -281,7 +277,7 @@ void menu_window()
 void scroll_pad()
 {
     int     c,
-            start = 1;
+            start = 0;
 
     curs_set(0);
     prefresh(my_pad, start, 0, y, x, port_y, PAD_WIDTH);
