@@ -88,6 +88,7 @@ void get_divisions(int*);
 /* IO.ncurses */
 
 void init_scr();
+void get_screen_details();
 void mem_error();
 void clear_pad();
 void clear_win();
@@ -110,5 +111,4 @@ void show_var(int*, int*, int*);
 void disp_menu();
 void print_harmonics(harmonic*, int*);
 void print_data(calc*, int*, int*);
-void arrow_sig();
 

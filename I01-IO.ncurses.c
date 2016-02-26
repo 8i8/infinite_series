@@ -7,16 +7,16 @@
 
 #define PAD_WIDTH       80                          /* Pad width             */
 #define Nelts(a)        (sizeof(a)/sizeof(a[0]))    /* Number of menu option */
-#define MENU_Y          12                          /* Menu window height    */
-#define MENU_X          80                          /* Menue window width    */
+#define MENU_Y          10                          /* Menu window height    */
+#define MENU_X          80                          /* Menu window width     */
 
 static WINDOW*  my_win;
 static WINDOW*  my_pad;
 
-static int      max_y,
-                max_x,
-                y = 10,
-                x = 4;
+static int      port_y,
+                port_x,
+                y = 10,                             /* Margin top of pad     */
+                x = 5;                              /* Margin left of pad    */
 
 /*--------------------------------------------------------------------------*
  * Program base functionality
@@ -31,9 +31,21 @@ void init_scr()
     initscr();
     cbreak();
     keypad(stdscr, TRUE);
+    get_screen_details();
+}
+
+/*
+ * Retreive and store sreen size, make ofset for margin
+ */
+
+void get_screen_details()
+{
+    int     max_y,
+            max_x;
+
     getmaxyx(stdscr, max_y, max_x);
-    max_y = max_y - 4;
-    max_x = max_x -(2 * x);
+    port_y = max_y - MENU_Y;
+    port_x = max_x;
 }
 
 /*
@@ -42,7 +54,10 @@ void init_scr()
 
 void clear_pad()
 {
-    prefresh(my_pad, 0, 0, y, x, max_y, max_x);
+    clear();
+    werase(my_win);
+    wrefresh(my_win);
+    prefresh(my_pad, 0, 0, y, x, port_y, port_x);
     refresh();
 }
 
@@ -180,8 +195,6 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
     int     i;
     
     clear_pad();
-    prefresh(my_pad, 0, 0, y, x, max_y, max_x);
-    refresh();
 
     for (i = 1; i <= (*quantity); i++)
     {
@@ -191,7 +204,8 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
                                                         harm_series[i].value);
     }
 
-    prefresh(my_pad, 0, 0, y, x, max_y, max_x);
+    prefresh(my_pad, 0, 0, y, x, port_y, port_x);
+    refresh();
 
 }
 
@@ -207,7 +221,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 
     for (i = 1; i < (*quantity) * (*divs); i++)
     {
-        mvwprintw(my_pad, i, 0, "%-4d z=z+1/%-4d %4d/%d -> %.15f\n",
+        mvwprintw(my_pad, i, 0, "%-4d z=z+1/%-4d/%4d/%d -> %.15f\n",
 
                                                         divisions[i].id,
                                                         divisions[i].harmonic,
@@ -216,25 +230,8 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
                                                         divisions[i].value); 
     }
 
-    prefresh(my_pad, 0, 0, y, x, max_y, max_x);
+    prefresh(my_pad, 0, 0, y, x, port_y, port_x);
 
-}
-
-void arrow_sig()
-{
-    /*
-    mvprintw(LINES - 3, 1, "Use the Up/Down arrows to scroll.");
-    mvprintw(LINES - 2, 1, "F1 Return to menu");
-    */
-}
-
-/*
- * Erase text 
- * int wredrawln(WINDOW *win, int beg_line, int num_lines);
- */
-
-void errase_arrow_sig()
-{
 }
 
 /*--------------------------------------------------------------------------*
@@ -264,7 +261,6 @@ void make_pad(int* length)
 
     my_pad = newpad(*length, PAD_WIDTH);
 
-    arrow_sig();
 }
 
 void menu_window()
@@ -285,16 +281,16 @@ void scroll_pad()
             start = 1;
 
     curs_set(0);
-    prefresh(my_pad, start, 0, y, x, max_y, max_x);
+    prefresh(my_pad, start, 0, y, x, port_y, port_x);
 
     while((c = getch()) != KEY_F(1))
     {   
         switch(c)
         {   case KEY_DOWN:
-                prefresh(my_pad, start++, 0, y, x, max_y, max_x);
+                prefresh(my_pad, start++, 0, y, x, port_y, port_x);
                 break;
             case KEY_UP:
-                prefresh(my_pad, start--, 0, y, x, max_y, max_x);
+                prefresh(my_pad, start--, 0, y, x, port_y, port_x);
                 break;
         }
     }
