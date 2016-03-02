@@ -14,9 +14,9 @@
 static    harmonic*   data_1;
 static    calc*       data_2;
 
-static    int         start       = 0,
-                      quantity    = 0,
-                      divisions   = 0;
+static    int         start,
+                      quantity,
+                      divisions;
 
 /*
  * Get parameters from user.

@@ -279,6 +279,7 @@ void scroll_pad()
 
     curs_set(0);
     prefresh(my_pad, start, 0, y, x, port_y, PAD_WIDTH);
+    noecho();
 
     while((c = getch()) != KEY_F(1))
     {   
@@ -295,6 +296,7 @@ void scroll_pad()
     clear_pad();
     delwin(my_pad);
     disp_menu();
+    echo();
     get_choice();
 
 }
