@@ -5,7 +5,7 @@
 #include <ncurses.h>
 #include "I01-inf_series.h"
 
-#define PAD_WIDTH       80                          /* Pad width             */
+#define PAD_WIDTH       45                          /* Pad width             */
 #define Nelts(a)        (sizeof(a)/sizeof(a[0]))    /* Number of menu option */
 #define MENU_Y          10                          /* Menu window height    */
 #define MENU_X          80                          /* Menu window width     */
@@ -17,8 +17,8 @@ static int      max_y,
                 max_x,
                 port_y,
                 port_x,
-                y = 10,                             /* Margin top of pad     */
-                x = 5;                              /* Margin left of pad    */
+                y = 9,                              /* Margin top of pad     */
+                x = 2;                              /* Margin left of pad    */
 
 /*--------------------------------------------------------------------------*
  * Program base functionality
@@ -101,7 +101,7 @@ static struct
 }
     menu_opts[] = 
 {
-    { "Set paramiters start and length of calc.",   get_param        },
+    { "Set paramiters",                             get_param        },
     { "Set number of divisions.",                   change_div       },
     { "Print harmonic series.",                     echo_harmonics   },
     { "Print series with divisions.",               echo_out         },
@@ -119,24 +119,22 @@ void n_disp_menu(int* sta, int* qua, int* div)
 
     clear_win();
     curs_set(1);
-    mvwprintw(my_win, 1, 20,"x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
-    mvwprintw(my_win, 2, 0,"");
-    mvwprintw(my_win, 3, 0,"Please choose an option:");
+    mvwprintw(my_win, 1, 2,"x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)");
 
     /*
      * Display the function menu.
      */
 
     for (i = 0; i < Nelts(menu_opts); i++)
-        mvwprintw(my_win, (i+4), 4, "%2d). %s", i+1, menu_opts[i].string);
+        mvwprintw(my_win, (i+3), 2, "%d) %s", i+1, menu_opts[i].string);
 
     /*
      * Display user entered variables.
      */
 
-    mvwprintw(my_win, (i+1), 65," sta = %4d", *sta);
-    mvwprintw(my_win, (i+2), 65," qua = %4d", *qua);
-    mvwprintw(my_win, (i+3), 65," div = %4d", *div);
+    mvwprintw(my_win, (i+0), 36," sta = %-4d", *sta);
+    mvwprintw(my_win, (i+1), 36," qua = %-4d", *qua);
+    mvwprintw(my_win, (i+2), 36," div = %-4d", *div);
     wrefresh(my_win);
 }
 
@@ -197,7 +195,7 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 
     for (i = 1; i <= (*quantity); i++)
     {
-        mvwprintw(my_pad, i-1, 0, "From the print function %2d >>> %.16f\n",
+        mvwprintw(my_pad, i-1, 20, "%2d >>> %.16f\n",
 
                                                         harm_series[i].id,
                                                         harm_series[i].value);
