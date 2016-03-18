@@ -5,7 +5,7 @@
 #include <ncurses.h>
 #include "I01-inf_series.h"
 
-#define PAD_WIDTH       45                          /* Pad width             */
+#define PAD_WIDTH       50                          /* Pad width             */
 #define Nelts(a)        (sizeof(a)/sizeof(a[0]))    /* Number of menu option */
 #define MENU_Y          10                          /* Menu window height    */
 #define MENU_X          80                          /* Menu window width     */
@@ -218,7 +218,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 
     for (i = 1; i <= (*quantity) * (*divs); i++)
     {
-        mvwprintw(my_pad, i-1, 0, "%-4d z=z+1/%-4d/%4d/%d -> %.15f\n",
+        mvwprintw(my_pad, i-1, 0, "%-4d z=z+1/%-4d/%4d/%4d -> %.15f\n",
 
                                                         divisions[i].id,
                                                         divisions[i].harmonic,

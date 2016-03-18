@@ -2,6 +2,9 @@
  * Data calculation by way of the itteration of two loops.
  */
 
+/*
+ * #include <math.h>
+ */
 #include "I01-inf_series.h"
 
 /*
@@ -83,7 +86,14 @@ calc* gen_subs(harmonic *harmonics, calc *divisions, int quantity, int divs)
                 divisions[l].division = divs;
                 divisions[l].fraction = j+1;
                 
+                
                 k = (k + (double)1/(divs*(double)harmonics[i].id));
+                
+/*
+ *              x = (double)1/divs;
+ *              y = (double)harmonics[i].id;
+ *              k = fma(x,y,k);
+ */
 
                 divisions[l].value = k;
 
