@@ -5,10 +5,10 @@
 #include <ncurses.h>
 #include "I01-inf_series.h"
 
-#define PAD_WIDTH       45                          /* Pad width             */
-#define Nelts(a)        (sizeof(a)/sizeof(a[0]))    /* Number of menu option */
-#define MENU_Y          10                          /* Menu window height    */
-#define MENU_X          80                          /* Menu window width     */
+#define PAD_WIDTH       45                         /* Pad width             */
+#define Nelts(a)        (sizeof(a)/sizeof(a[0]))   /* Number of menu option */
+#define MENU_Y          10                         /* Menu window height    */
+#define MENU_X          80                         /* Menu window width     */
 
 static WINDOW*  my_win;
 static WINDOW*  my_pad;
@@ -17,8 +17,8 @@ static int      max_y,
                 max_x,
                 port_y,
                 port_x,
-                y = 9,                              /* Margin top of pad     */
-                x = 2;                              /* Margin left of pad    */
+                y = 9,                             /* Margin top of pad     */
+                x = 2;                             /* Margin left of pad    */
 
 /*--------------------------------------------------------------------------*
  * Program base functionality
@@ -99,7 +99,7 @@ static struct
     char*   string;
     void    (*func)(void);
 }
-    menu_opts[] = 
+    menu_opts[] =
 {
     { "Set paramiters",                             get_param        },
     { "Set number of divisions.",                   change_div       },
@@ -190,7 +190,7 @@ void n_get_int(int* number, char string[])
 void n_print_harmonics(harmonic* harm_series, int* quantity)
 {
     int     i;
-    
+
     clear_pad();
 
     for (i = 1; i <= (*quantity); i++)
@@ -224,7 +224,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
                                                         divisions[i].harmonic,
                                                         divisions[i].fraction,
                                                         *divs,
-                                                        divisions[i].value); 
+                                                        divisions[i].value);
     }
 
     prefresh(my_pad, 0, 0, y, x, max_y, PAD_WIDTH);
@@ -282,7 +282,7 @@ void scroll_pad()
     noecho();
 
     while((c = getch()) != KEY_F(1))
-    {   
+    {
         switch(c)
         {   case KEY_DOWN:
                 prefresh(my_pad, start++, 0, y, x, port_y, PAD_WIDTH);

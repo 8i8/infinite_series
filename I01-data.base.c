@@ -8,6 +8,7 @@
  *  {"Exit.",                                      quit_prg         }
  */
 
+
 #include <stdlib.h>
 #include "I01-inf_series.h"
 
@@ -99,4 +100,3 @@ void quit_prg()
     free_all();
     exit(0);
 }
-
