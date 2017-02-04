@@ -1,5 +1,6 @@
 /*
  * Data calculation by way of the itteration of two loops.
+ *
  */
 
 #include "I01-inf_series.h"
