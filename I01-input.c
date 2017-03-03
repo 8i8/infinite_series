@@ -12,7 +12,7 @@
 
 void get_start(int* start)
 {
-    char    question1[17] = "Start harmonic: ";
+    char    question1[] = "Start harmonic: ";
 
     n_get_int(&(*start),     question1);
     disp_menu();
@@ -20,7 +20,7 @@ void get_start(int* start)
 
 void get_quantity(int* quantity)
 {
-    char    question2[24] = "Quantity of harmonics: ";
+    char    question2[] = "Quantity of harmonics: ";
 
     n_get_int(&(*quantity),  question2);
     disp_menu();
@@ -28,7 +28,7 @@ void get_quantity(int* quantity)
 
 void get_divisions(int* divisions)
 {
-    char    question3[24] = "Quantity of divisions: ";
+    char    question3[] = "Quantity of divisions: ";
 
     n_get_int(&(*divisions), question3);
     disp_menu();

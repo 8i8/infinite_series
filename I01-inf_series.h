@@ -22,7 +22,7 @@
 struct harmonics
 {
     int         id;
-    double      value;
+    long double value;
 };
 
 typedef struct harmonics    harmonic;
@@ -43,7 +43,7 @@ struct calculation
     int         harmonic;
     int         division;
     int         fraction;
-    double      value;
+    long double value;
 
 };
 

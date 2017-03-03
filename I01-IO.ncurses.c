@@ -3,10 +3,11 @@
  */
 
 #include <ncurses.h>
+#include <float.h>
 #include "I01-inf_series.h"
 
 #define PAD_WIDTH       45                         /* Pad width             */
-#define Nelts(a)        (sizeof(a)/sizeof(a[0]))   /* Number of menu option */
+#define NUM_OPTS(a)     (sizeof(a)/sizeof(a[0]))   /* Number of menu option */
 #define MENU_Y          10                         /* Menu window height    */
 #define MENU_X          80                         /* Menu window width     */
 
@@ -125,16 +126,17 @@ void n_disp_menu(int* sta, int* qua, int* div)
      * Display the function menu.
      */
 
-    for (i = 0; i < Nelts(menu_opts); i++)
+    for (i = 0; i < NUM_OPTS(menu_opts); i++)
         mvwprintw(my_win, (i+3), 2, "%d) %s", i+1, menu_opts[i].string);
 
     /*
      * Display user entered variables.
      */
 
-    mvwprintw(my_win, (i+0), 36," sta = %-4d", *sta);
-    mvwprintw(my_win, (i+1), 36," qua = %-4d", *qua);
-    mvwprintw(my_win, (i+2), 36," div = %-4d", *div);
+    mvwprintw(my_win, (i-1), 33,"              1/12 = 0.08333");
+    mvwprintw(my_win, (i+0), 33,"    sta = %-4d   e = 2.71828", *sta);
+    mvwprintw(my_win, (i+1), 33,"    qua = %-4d  pi = 3.14159", *qua);
+    mvwprintw(my_win, (i+2), 33," div(x) = %-4d   λ = 4.66920", *div);
     wrefresh(my_win);
 }
 
@@ -156,8 +158,8 @@ void get_choice()
 
     for (;;)
     {
-        mvwscanw(my_win,(Nelts(menu_opts)+4), 0, "%d", &choice);
-        if (choice > 0 && choice <= Nelts(menu_opts))
+        mvwscanw(my_win,(NUM_OPTS(menu_opts)+4), 0, "%d", &choice);
+        if (choice > 0 && choice <= NUM_OPTS(menu_opts))
             break;
         wrefresh(my_win);
     }
@@ -173,7 +175,7 @@ void get_choice()
 
 void n_get_int(int* number, char string[])
 {
-    mvwprintw(my_win, (Nelts(menu_opts)+4), 0, "%s", string);
+    mvwprintw(my_win, (NUM_OPTS(menu_opts)+4), 0, "%s", string);
     wscanw(my_win,"%d", &(*number));
     wrefresh(my_win);
     wclear(my_win);
@@ -195,7 +197,7 @@ void n_print_harmonics(harmonic* harm_series, int* quantity)
 
     for (i = 1; i <= (*quantity); i++)
     {
-        mvwprintw(my_pad, i-1, 20, "%2d >>> %.16lf\n",
+        mvwprintw(my_pad, i-1, 20, "%2d >>> %.18Le\n",
 
                                                         harm_series[i].id,
                                                         harm_series[i].value);
@@ -218,7 +220,7 @@ void n_print_calc(calc* divisions, int* quantity, int* divs)
 
     for (i = 1; i <= (*quantity) * (*divs); i++)
     {
-        mvwprintw(my_pad, i-1, 0, "%-4d z=z+1/%-4d/%4d/%d -> %.15lf\n",
+        mvwprintw(my_pad, i-1, 0, "%-4d z=z+1/%-4d/%4d/%d -> %.18Le\n",
 
                                                         divisions[i].id,
                                                         divisions[i].harmonic,
@@ -281,7 +283,7 @@ void scroll_pad()
     prefresh(my_pad, start, 0, y, x, port_y, PAD_WIDTH);
     noecho();
 
-    while((c = getch()) != KEY_F(1))
+    while((c = getch()) != '1')
     {
         switch(c)
         {   case KEY_DOWN:
@@ -300,4 +302,3 @@ void scroll_pad()
     get_choice();
 
 }
-

@@ -8,7 +8,6 @@
  *  {"Exit.",                                      quit_prg         }
  */
 
-
 #include <stdlib.h>
 #include "I01-inf_series.h"
 
@@ -64,7 +63,7 @@ void generate_data()
 }
 
 /*
- * Echo to calc to screen.
+ * Echo the calc to screen.
  */
 
 void echo_harmonics()

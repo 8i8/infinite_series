@@ -1,17 +1,16 @@
 /*
  * Data calculation by way of the itteration of two loops.
- *
  */
 
 #include "I01-inf_series.h"
 
 /*
- * Create input offset for display reasons.
+ * Create input offset to correct display values.
  */
 
 void off_set_param(int* start, int* quantity)
 {
-    *start    = *start    - 1;
+    *start = *start - 1;
     *quantity = *quantity + 1;
 }
 
@@ -28,7 +27,7 @@ harmonic* gen_harmonics(harmonic* harm_series, int start, int quantity)
 {
     int         i;
     int         j;
-    double      k;
+    long double      k;
 
     i = 1;
     k = 0;
@@ -45,7 +44,7 @@ harmonic* gen_harmonics(harmonic* harm_series, int start, int quantity)
 
     for (j = 1; j <= quantity; j++)
     {
-        k = k + ((double)1/(i));
+        k = k + ((long double)1/(i));
         harm_series[j].id        = i;
         harm_series[j].value     = k;
         i++;
@@ -59,7 +58,6 @@ harmonic* gen_harmonics(harmonic* harm_series, int start, int quantity)
  * Generate values between harmonics.
  *
  *              x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)
- *
  */
 
 calc* gen_subs(harmonic *harmonics, calc *divisions, int quantity, int divs)
@@ -67,7 +65,7 @@ calc* gen_subs(harmonic *harmonics, calc *divisions, int quantity, int divs)
     int     i;
     int     j;
     int     l;
-    double  k;
+    long double  k;
 
     l = 0;
 
@@ -84,7 +82,7 @@ calc* gen_subs(harmonic *harmonics, calc *divisions, int quantity, int divs)
                 divisions[l].division = divs;
                 divisions[l].fraction = j+1;
                 
-                k = (k + (double)1/(divs*(double)harmonics[i].id));
+                k = (k + (long double)1/(divs*(long double)harmonics[i].id));
 
                 divisions[l].value = k;
 
