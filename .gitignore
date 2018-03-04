@@ -8,3 +8,6 @@ infiniteSeries.config
 infiniteSeries.creator
 infiniteSeries.files
 infiniteSeries.includes
+open
+cscope.*
+*.o
