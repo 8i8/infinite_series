@@ -1,20 +1,6 @@
-/*
- ============================================================================
- Name        : I01-IO.ncurses.c
- Author      : Iain Hill
- Version     : 1
- Copyright   : GPL
-
- Description : Exploring the patterns inherent within the harmonic series
-		through the following expansion:
-
- 		x(1/x) + x(1/2x) + x(1/3x) ... x(1/nx)
-
-    Copyright (C) 2017 Iain Hill. 
-
- ============================================================================
- */
-
+/* ==========================================================================
+    Copyright   : GPL Copyright (C) 2017 Iain Hill. 
+   ========================================================================== */
 /*
  * Separation of ncurses from program body.
  */
@@ -303,11 +289,18 @@ void scroll_pad()
     while((c = getch()) != '1')
     {
         switch(c)
-        {   case KEY_DOWN:
+        {
+            case KEY_DOWN:
                 prefresh(my_pad, start++, 0, y, x, port_y, PAD_WIDTH);
                 break;
             case KEY_UP:
                 prefresh(my_pad, start--, 0, y, x, port_y, PAD_WIDTH);
+                break;
+            case KEY_NPAGE:
+                prefresh(my_pad, start += max_y - 9, 0, y, x, port_y, PAD_WIDTH);
+                break;
+            case KEY_PPAGE:
+                prefresh(my_pad, start -= max_y - 9, 0, y, x, port_y, PAD_WIDTH);
                 break;
         }
     }
