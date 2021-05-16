@@ -14,13 +14,13 @@
 
 harmonic* new_data_struct_1(int quant)
 {
-    harmonic* _new = malloc((quant+1) * sizeof(harmonic));
-    if (_new == NULL)
+    harmonic* new = malloc((quant+1) * sizeof(harmonic));
+    if (new == NULL)
     {
         mem_error();
         exit(1);
     }
-    return _new;
+    return new;
 }
 
 /*
@@ -29,13 +29,13 @@ harmonic* new_data_struct_1(int quant)
 
 calc* new_data_struct_2(int quant, int divisions)
 {
-    calc* _new = malloc(quant * divisions * sizeof(calc));
-    if (_new == NULL)
+    calc* new = malloc(quant * divisions * sizeof(calc));
+    if (new == NULL)
     {
         mem_error();
         exit(1);
     }
-    return _new;
+    return new;
 }
 
 /*
